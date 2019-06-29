@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FluidStories:jar">
+    <output-path>$USER_HOME$/Documents/PenguinServer/PenguinServer/plugins</output-path>
+    <root id="archive" name="FluidStories.jar">
+      <element id="module-output" name="FluidStories" />
+      <element id="extracted-dir" path="$USER_HOME$/Documents/FluidStories/spigot-api-1.14.1-R0.1-20190521.110733-27.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Documents/PenguinServer/PenguinServer/spigot.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

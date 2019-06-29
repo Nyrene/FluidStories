@@ -1,0 +1,23 @@
+name: FluidStories
+version: 0.1
+author: Rachael Little
+main: us.nyrene.fluidstories.main
+api-version: 1.14
+
+# Replace "kit" with the name of your command.
+commands:
+    spawnnpc:
+      description: Creates an NPC with the given name at your look location.
+      usage: /spawnnpc <name>
+
+    setnpcdesc:
+      description: Sets the selected NPC's description
+      usage: /setnpcdesc <name> <description>
+
+    looknpc:
+      description: Prints the selected NPC's description if it has one
+      usage: /looknpc <name>
+
+    fs:
+      description: Command set for creating and editing dialogues
+      usage: /fs <subcommand> <args>
