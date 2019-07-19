@@ -30,7 +30,13 @@ public class CmdSetNPCDesc implements CommandExecutor {
                 newDesc = newDesc + " " + args[i];
             }
 
-            main.getInstance().getNPCMgr().setNPCDescriptionForPlayer(args[0], newDesc, writer.getUniqueId());
+            DError errInst = new DError();
+            main.getInstance().getNPCMgr().setNPCDescriptionForPlayer(args[0], newDesc, writer.getUniqueId(), errInst);
+            if (errInst.type != DErrorType.NOERROR) {
+                writer.sendMessage(errInst.msg);
+            } else {
+                writer.sendMessage("Description set!");
+            }
 
             return true;
         }

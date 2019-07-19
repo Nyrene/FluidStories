@@ -52,6 +52,7 @@ public class NPCData {
         if (description == null) {
             return "";
         }
+
         return description;
     }
 

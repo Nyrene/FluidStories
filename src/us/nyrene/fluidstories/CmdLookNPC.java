@@ -25,7 +25,9 @@ public class CmdLookNPC implements CommandExecutor {
             // maybe later on, have the player right click the entity instead
 
             // for now, just see if the NPC exists at all
-            main.getInstance().getNPCMgr().getNPCDesc(args[0]);
+            DError errInst = new DError();
+            String desc = main.getInstance().getNPCMgr().getNPCDesc(args[0]);
+            writer.sendMessage(desc);
 
             return true;
         }

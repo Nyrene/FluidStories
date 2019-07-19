@@ -89,34 +89,43 @@ public class NPCManager {
         }
 
         if (fetchedNPC.getNPCDescription() != "") {
+            return fetchedNPC.getNPCDescription();
+        } else {
             return "You can't determine anything about this person.";
         }
-        return "";
+
+        //return "";
     }
 
-    public NPCData getNPCDataWithNameForPlayer(String npcName, UUID playerID) {
+    public NPCData getNPCDataWithNameForPlayer(String npcName, UUID playerID, DError error) {
         // get the named NPC and check that the requesting player is an owner
         NPCData fetchedNPC = activeNPCs.get(npcName);
 
-        if (fetchedNPC == null || fetchedNPC.playerOwner != playerID) {
-            return null; // TD replace with error
+        if (fetchedNPC == null) {
+            error.setMsg("No NPC with that name was found.");
+            error.setType(DErrorType.NULLNODE);
+            return null;
+        }
+
+        if (fetchedNPC.playerOwner != playerID) {
+            error.setMsg("You do not have permissions to modify this NPC.");
         }
 
         return fetchedNPC;
     }
 
-    public void setNPCDescriptionForPlayer(String npcName, String newDesc, UUID playerID) {
-        NPCData fetchedNPC = getNPCDataWithNameForPlayer(npcName, playerID);
+    public void setNPCDescriptionForPlayer(String npcName, String newDesc, UUID playerID, DError error) {
+        NPCData fetchedNPC = getNPCDataWithNameForPlayer(npcName, playerID, error);
 
-        if (fetchedNPC == null) {
-            return; // TD replace with error
+        if (fetchedNPC == null || error.type != DErrorType.NOERROR) {
+            return;
         }
 
         fetchedNPC.setNPCDescription(newDesc);
     }
 
-    public void assignDialogueToNPCForPlayer(String npcName, String dialogueTreeName, UUID playerID) {
-        NPCData fetchedNPC = getNPCDataWithNameForPlayer(npcName, playerID);
+    public void assignDialogueToNPCForPlayer(String npcName, String dialogueTreeName, UUID playerID, DError error) {
+        NPCData fetchedNPC = getNPCDataWithNameForPlayer(npcName, playerID, error);
 
         if (fetchedNPC == null) {
             return; // TD replace with error

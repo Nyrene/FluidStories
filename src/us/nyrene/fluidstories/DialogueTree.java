@@ -17,6 +17,11 @@ class DError {
         type = givenType;
     }
 
+    public DError() {
+        msg = "";
+        type = DErrorType.NOERROR;
+    }
+
     void setMsg(String givenMsg) {
         msg = givenMsg;
     }
@@ -271,6 +276,7 @@ public class DialogueTree {
 
     }
 
+    /* --- rewriting below, as now NPCs will have their own instance of a tree.
     //********* functions for players speaking to NPCs.
     //********* these are a mess. Must fix them next
     // give player instance or return a string to print to the player?
@@ -309,5 +315,6 @@ public class DialogueTree {
         currentNode = currentNode.pStatements[givenResponse].npcNode;
         return "";
     }
+    */
 }
 
