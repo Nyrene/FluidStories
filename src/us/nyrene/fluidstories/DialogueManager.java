@@ -3,11 +3,15 @@ import java.util.UUID;
 import java.util.HashMap;
 
 public class DialogueManager {
+    // trees actively being edited, can't be assigned to NPCs
     private HashMap<String, DialogueTree> editingDialogues = new HashMap<String, DialogueTree>();
+
+    // trees that are no longer being edited/are finished. Can be assigned to NPCs
+    private HashMap<String, DialogueTree> closedDialogues = new HashMap<String, DialogueTree>();
 
 
     public String saveDialogue(DialogueTree givenDialogue) {
-
+        //
 
         // later: write to file
 
@@ -15,7 +19,11 @@ public class DialogueManager {
     }
 
     public String closeDialogue(UUID playerID) {
+        // remove the dialogue from active editing.
+        // don't bother prompting to save for now - just remove it, user can
+        // decide whether or not to save
 
+        return "";
     }
 
     public String createNewDialogue(String newName, UUID playerID) {
