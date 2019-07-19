@@ -59,11 +59,15 @@ public class NPCManager {
             // ---placeholder
     }
 
-    public void removeNPC(String npcName, UUID playerID) {
-        NPCData fetchedNPC = activeNPCs.get(npcName);
+    public String removeNPC(String npcName, UUID playerID) {
+        DError errInst = new DError();
+        NPCData fetchedNPC = getNPCDataWithNameForPlayer(npcName, playerID, errInst);
+        if (errInst.type != DErrorType.NOERROR) {
+            return errInst.msg;
+        }
+
         if (fetchedNPC == null) {
-            // TD: error
-            return;
+            return "Unspecified error.";
         }
 
         World thisWorld = fetchedNPC.location.getWorld();
@@ -78,6 +82,8 @@ public class NPCManager {
             }
 
         }
+
+        return "";
     }
 
     public String getNPCDesc(String npcName) {

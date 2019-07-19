@@ -5,10 +5,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class main extends JavaPlugin {
     private static main instance;
     NPCManager npcMgr = new NPCManager();
+    DialogueManager dialogueManager = new DialogueManager();
 
 
     CmdFS fsCmd = new CmdFS();
     CmdSetNPCDesc npcDescCmd = new CmdSetNPCDesc();
+    CmdRemoveNPC rmNPCCMD = new CmdRemoveNPC();
 
     @Override
     public void onEnable() {
@@ -16,6 +18,7 @@ public class main extends JavaPlugin {
         this.getCommand("setnpcdesc").setExecutor(npcDescCmd);
         this.getCommand("looknpc").setExecutor(new CmdLookNPC());
         this.getCommand("fs").setExecutor(fsCmd);
+        this.getCommand("removenpc").setExecutor(rmNPCCMD);
         //this.getCommand("talknpc").setExecutor(talkCmd);
         //this.getCommand("say").setExecutor(sayCmd);
     }

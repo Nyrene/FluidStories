@@ -18,6 +18,10 @@ commands:
       description: Prints the selected NPC's description if it has one
       usage: /looknpc <name>
 
+    removenpc:
+      description: removes the named NPC.
+      usage: /removenpc <name>
+
     fs:
       description: Command set for creating and editing dialogues
       usage: /fs <subcommand> <args>

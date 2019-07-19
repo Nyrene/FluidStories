@@ -28,7 +28,11 @@ public class CmdRemoveNPC implements CommandExecutor {
 
 
             // TD: error handling or wrap in try
-            main.getInstance().getNPCMgr().removeNPC(args[0], writer.getUniqueId());
+            String errString = main.getInstance().getNPCMgr().removeNPC(args[0], writer.getUniqueId());
+
+            if (errString != "") {
+                writer.sendMessage(errString);
+            }
 
             return true;
         }
