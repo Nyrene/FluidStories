@@ -24,21 +24,13 @@ public class CmdSetNPCDesc implements CommandExecutor {
                 return false;
             }
 
-            Player writer = (Player) pSender;
-
-            if (NPCData.getNPCWithName(args[0]) != null) {
-                NPCData npc = NPCData.getNPCWithName(args[0]);
-                // get the args string
-                String descString = "";
-                for (int i = 1; i < args.length; i++) {
-                    descString = descString + " " + args[i];
-                }
-
-                // set that to the description
-                npc.description = descString;
-            } else {
-                writer.sendMessage("No one with that name is nearby.");
+            Player writer = (Player) pSender; // use try statement here, and send any caught errors to writer
+            String newDesc = "";
+            for (int i = 1; i < args.length; i++) {
+                newDesc = newDesc + " " + args[i];
             }
+
+            main.getInstance().getNPCMgr().setNPCDescriptionForPlayer(args[0], newDesc, writer.getUniqueId());
 
             return true;
         }

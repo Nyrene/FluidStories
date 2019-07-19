@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import org.bukkit.entity.Player;
 
-enum DErrorType { INVALIDTREE, NULLNODE, NULLNATTR, NOERROR}
+enum DErrorType { INVALIDTREE, NULLNODE, NULLNATTR, NOERROR, OUTOFBOUNDS}
 
 class DError {
-    String msg = "";
-    DErrorType type = null;
+    String msg;
+    DErrorType type;
 
     public DError(DErrorType givenType, String givenMessage) {
         msg = givenMessage;
@@ -23,6 +23,11 @@ class DError {
 
     void setType(DErrorType givenType) {
         type = givenType;
+    }
+
+    void reset() {
+        type = DErrorType.NOERROR;
+        msg = "";
     }
 
 }
@@ -62,6 +67,11 @@ class NPCStatement {
         pStatements = new PlayerStatement[MAXPLAYERSTATEMENTS];
     }
 
+    public NPCStatement(String givenMsg) {
+        msg = givenMsg;
+        pStatements = new PlayerStatement[MAXPLAYERSTATEMENTS];
+    }
+
 }
 
 public class DialogueTree {
@@ -77,6 +87,7 @@ public class DialogueTree {
                 // ownership of their tree
     ArrayList<UUID> sharedWriters;
     String playerOwner; // owns the file/tree - used for filename
+    boolean beingEdited = false;
 
 
     NPCStatement currentNode;
@@ -88,6 +99,8 @@ public class DialogueTree {
         playerOwner = playerName;
         rootNode = new NPCStatement();
         currentNode = rootNode;
+
+        beingEdited = true;
     }
 
     public static void addDialogueToExisting(DialogueTree newTree) {
@@ -125,30 +138,57 @@ public class DialogueTree {
         return getDialogueForFName(treeIDString);
     }
 
-    public void addPMsgToCurrent(PlayerStatement givenPS) {
-        if (givenPS == null) {
-            System.out.println("Can't add null PS to current node!");
-            return;
-        }
+    public void addPMsgToCurrent(String givenPMsg, DError cmdError) {
 
         if (currentNode.numPStatements == NPCStatement.MAXPLAYERSTATEMENTS) {
+            cmdError.setMsg("Can't add player message; have reached limit.");
+            cmdError.type = DErrorType.INVALIDTREE;
             return;
-            //TD: print to the user that they've reached the limit
         }
 
+
+        PlayerStatement newPStatement = new PlayerStatement(givenPMsg, currentNode);
         currentNode.numPStatements++;
-        currentNode.pStatements[currentNode.numPStatements - 1] = givenPS;
+        currentNode.pStatements[currentNode.numPStatements - 1] = newPStatement;
+
+    }
+
+    //activePDialogue.addNPCMsgToPmsg((selectedPNum - 1), thisNPCMsg, cmdError);
+    public void addNPCMsgToPMsg(int givenPIndex, String givenNPCMsg, DError error) {
+
+        if (givenPIndex >= currentNode.numPStatements) {
+            error.type = DErrorType.OUTOFBOUNDS;
+            error.msg = "Please select a valid player statement to add this message to.";
+            return;
+        }
+
+
+        NPCStatement newNPCStatement = new NPCStatement(givenNPCMsg);
+        newNPCStatement.playerPrevious = currentNode.pStatements[givenPIndex];
+        currentNode.pStatements[givenPIndex].npcNode = newNPCStatement;
+
+
+/*
+ NPCStatement newNPCStatement = new NPCStatement();
+                    // TD: proper constructors, currently the dialogue class sets stuff when
+                    // new dialogues are created so need a blank one and a msg one
+                    newNPCStatement.msg = thisNPCMsg;
+                    newNPCStatement.playerPrevious = activePDialogue.currentNode.pStatements[selectedPNum - 1];
+
+                    activePDialogue.currentNode.pStatements[selectedPNum - 1].npcNode = newNPCStatement;
+ */
+
 
     }
 
     // trying out returning a string msg for errors these next two functions...
     // TD: figure out whether to do this with all setter methods
     // or remove it here for consistency
-    public String selPStatement(int givenPNum) {
+    public String selPStatement(int PIndex) {
         if (currentNode.numPStatements == 0) return "No player statements to select!";
-        if (currentNode.pStatements[givenPNum] == null) return "Invalid selection.";
+        if (currentNode.pStatements[PIndex] == null || currentNode.pStatements[PIndex].npcNode == null) return "Invalid selection.";
 
-        currentNode = currentNode.pStatements[givenPNum].npcNode;
+        currentNode = currentNode.pStatements[PIndex].npcNode;
         return "";
     }
 
@@ -166,10 +206,28 @@ public class DialogueTree {
         if (currentNode.numPStatements == 0) return "No player statements to delete!";
         if (currentNode.pStatements[givenPNum] == null) return "Invalid selection.";
 
-
+        //see below pseudocode
+        //if (givenPNum)
         currentNode.pStatements[givenPNum] = null;
+
+
+        currentNode.numPStatements -= 1;
         return "";
     }
+
+    /*
+    if (givenInt == 1 and currentNode.numPlayerStatements == 1) then
+		currentNode.playerStatements = {}
+	else
+		local shiftNum = givenInt + 1
+		--local shiftEnd = numPlayerStatements
+		while (shiftNum <= currentNode.numPlayerStatements) do
+			currentNode.playerStatements[shiftNum - 1].msg = currentNode.playerStatements[shiftNum].msg
+			shiftNum = shiftNum + 1
+		end
+	end
+
+     */
 
 
     /*

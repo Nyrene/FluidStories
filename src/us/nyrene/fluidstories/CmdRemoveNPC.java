@@ -1,13 +1,12 @@
 package us.nyrene.fluidstories;
 
+import org.bukkit.block.Block;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
-import org.bukkit.block.Block;
 
-
-public class CmdSpawnNPC implements CommandExecutor {
+public class CmdRemoveNPC implements CommandExecutor {
 
     private NPCManager npcMgr;
 
@@ -21,16 +20,15 @@ public class CmdSpawnNPC implements CommandExecutor {
             //writer.sendMessage("This is the command!");
 
             // check that the args are correct: one argument, the name of the NPC
-                if (args.length != 1) {
-                    return false;
-                }
+            if (args.length != 1) {
+                return false;
+            }
 
             Player writer = (Player) pSender;
-            // get the player's look location
-            Block block = writer.getTargetBlock(null, 100);
+
 
             // TD: error handling or wrap in try
-            main.getInstance().getNPCMgr().spawnNPC(args[0], block.getLocation(), writer.getUniqueId());
+            main.getInstance().getNPCMgr().removeNPC(args[0], writer.getUniqueId());
 
             return true;
         }

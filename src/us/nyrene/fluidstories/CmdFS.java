@@ -19,7 +19,7 @@ public class CmdFS implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender pSender, Command cmd, String strLbl, String[] args) {
-
+        cmdError.reset();
         if (pSender instanceof Player) {
             Player writer = (Player) pSender;
 
@@ -103,10 +103,9 @@ public class CmdFS implements CommandExecutor {
                         pMsgString = pMsgString + " " + args[i];
                     }
 
-                    // attempt to add player statement.
-                    // TD: must move stuff like this to accessor/setter methods
-                    PlayerStatement newPStatement = new PlayerStatement(pMsgString, activePDialogue.currentNode);
-                    activePDialogue.addPMsgToCurrent(newPStatement);
+                    activePDialogue.addPMsgToCurrent(pMsgString, cmdError);
+                    if (cmdError.type != DErrorType.NOERROR) writer.sendMessage(cmdError.msg);
+
                     activePDialogue.printCurrentNode(writer);
                     break;
 
@@ -116,28 +115,22 @@ public class CmdFS implements CommandExecutor {
                         return true;
                     }
 
-                    // get number param, which is args[1], and convert to number.
-                    // check that it is a valid num which has a pmsg associated
-                    // if that passes, grab the rest of the message (loop starting at i)
-
-                    Integer thisPNum = Integer.valueOf(args[1]);
-                    if (activePDialogue.currentNode.pStatements[thisPNum - 1] == null) {
-                        writer.sendMessage("Please provide a valid number.");
-                        return true;
-                    }
-
+                    // parse command
+                    Integer selectedPNum = Integer.valueOf(args[1]);
                     String thisNPCMsg = "";
                     for (int i = 2; i < args.length; i++) {
                         thisNPCMsg = thisNPCMsg + " " + args[i];
                     }
+                    int PIndex = selectedPNum - 1;
+                    if (PIndex <= 0 || PIndex > NPCStatement.MAXPLAYERSTATEMENTS) {
+                        writer.sendMessage("Please choose a number within the available range.");
+                        return true;
+                    }
 
-                    NPCStatement newNPCStatement = new NPCStatement();
-                    // TD: proper constructors, currently the dialogue class sets stuff when
-                    // new dialogues are created so need a blank one and a msg one
-                    newNPCStatement.msg = thisNPCMsg;
-                    newNPCStatement.playerPrevious = activePDialogue.currentNode.pStatements[thisPNum - 1];
-
-                    activePDialogue.currentNode.pStatements[thisPNum - 1].npcNode = newNPCStatement;
+                    activePDialogue.addNPCMsgToPMsg((PIndex), thisNPCMsg, cmdError);
+                    if (cmdError.type != DErrorType.NOERROR) {
+                        writer.sendMessage(cmdError.msg);
+                    }
                     activePDialogue.printCurrentNode(writer);
                     break;
 
@@ -151,9 +144,15 @@ public class CmdFS implements CommandExecutor {
                         writer.sendMessage("usage: /fs select <#>");
                     }
 
+                    int selectedNum = Integer.valueOf(args[1]);
+                    if (selectedNum < 1 || selectedNum > NPCStatement.MAXPLAYERSTATEMENTS) {
+                        writer.sendMessage("Please use a number in a valid range.");
+                        return true;
+                    }
+
                     // go to next node if it exists, use the class for it
                     // TD: update this method to follow returnstring/error/etc
-                    returnString =  activePDialogue.selPStatement(Integer.valueOf(args[1]));
+                    returnString =  activePDialogue.selPStatement(selectedNum - 1);
                     if (returnString != "") writer.sendMessage(returnString);
                     activePDialogue.printCurrentNode(writer);
                     break;
@@ -168,12 +167,19 @@ public class CmdFS implements CommandExecutor {
                         writer.sendMessage("usage: /fs back");
                     }
 
-                    returnString = activePDialogue.selBack();
+                    activePDialogue.selBack(cmdError);
 
 
-                    if (returnString != "") writer.sendMessage(returnString);
+                    if (cmdError.type != DErrorType.NOERROR) writer.sendMessage(cmdError.msg);
                     activePDialogue.printCurrentNode(writer);
+                    break;
 
+                case "save":
+                    //
+                    break;
+
+                case "close":
+                    // add it to list of active/available dialogues for player to assign
                     break;
 
                 case "help":

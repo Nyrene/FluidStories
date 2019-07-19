@@ -7,6 +7,7 @@ import org.bukkit.entity.Entity;
 import java.util.logging.Logger;
 import java.util.UUID;
 import java.util.Map;
+import org.bukkit.Location;
 import java.util.HashMap;
 
 /*
@@ -32,32 +33,19 @@ import java.util.HashMap;
 
 public class NPCData {
 
-    private static Map<String, NPCData> createdEntities = new HashMap<String, NPCData>(); //name, NPC Data - NPCs will need to have unique names
-
     String name;
     String description;
     UUID entityID;
-    Map<String, Integer> playerOwners; // map with usernames, ID's
+    Location location;
+    DialogueTree dialogue;
+    UUID playerOwner;
 
-    public NPCData(String givenName, UUID givenEntityID) {
+    public NPCData(String givenName, UUID givenEntityID, Location givenLocation) {
         entityID = givenEntityID;
         name = givenName;
+        location = givenLocation;
         description = "";
 
-    }
-
-    public static void preserveNPCData(NPCData givenNPC, String givenNPCName) {
-        createdEntities.put(givenNPCName, givenNPC);
-        // null pointer exception here, may have to add the info to the
-    }
-
-    public static NPCData getNPCWithName(String givenName) {
-
-        return createdEntities.get(givenName);
-    }
-
-    public UUID getAssociatedEntityID() {
-        return entityID;
     }
 
     public String getNPCDescription() {
@@ -68,12 +56,24 @@ public class NPCData {
     }
 
     public void setNPCDescription(String givenDescription) {
-        if (givenDescription == null) {
+        if (givenDescription == null || givenDescription == "") {
             //log.info("Error: given NPC description was null");
             return;
         }
 
         description = givenDescription;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setDialogue(DialogueTree givenDialogue) {
+        if (givenDialogue != null) {
+            dialogue = givenDialogue;
+        }
+
+        // error, otherwise
     }
 
 

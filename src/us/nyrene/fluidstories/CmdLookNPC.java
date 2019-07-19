@@ -25,21 +25,7 @@ public class CmdLookNPC implements CommandExecutor {
             // maybe later on, have the player right click the entity instead
 
             // for now, just see if the NPC exists at all
-            if (NPCData.getNPCWithName(args[0]) != null) {
-                NPCData villager = NPCData.getNPCWithName(args[0]);
-                if (villager.getNPCDescription().equals("")) {
-                    writer.sendMessage("You can't determine anything about this villager.");
-                    return true;
-                }
-
-                writer.sendMessage(villager.getNPCDescription());
-
-            } else {
-                writer.sendMessage("No NPC with that name exists!");
-                return true;
-            }
-
-
+            main.getInstance().getNPCMgr().getNPCDesc(args[0]);
 
             return true;
         }
