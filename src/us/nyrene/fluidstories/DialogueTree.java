@@ -211,12 +211,17 @@ public class DialogueTree {
         if (currentNode.numPStatements == 0) return "No player statements to delete!";
         if (currentNode.pStatements[givenPNum] == null) return "Invalid selection.";
 
-        //see below pseudocode
+        //see below pseudocode - must also delete everything attached to those nodes
+        // to avoid memory leaks!
+        // unless Java takes care of it automatically?
         //if (givenPNum)
         currentNode.pStatements[givenPNum] = null;
-
-
         currentNode.numPStatements -= 1;
+        return "";
+    }
+
+    public String delNPCStatement(int givenPNum) {
+
         return "";
     }
 

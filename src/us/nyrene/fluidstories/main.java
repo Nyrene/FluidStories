@@ -41,4 +41,8 @@ public class main extends JavaPlugin {
     public NPCManager getNPCMgr() {
         return npcMgr;
     }
+
+    public DialogueManager getDialogueManager() {
+        return dialogueManager;
+    }
 }

@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 
 public class CmdFS implements CommandExecutor {
-    private static HashMap<String, DialogueTree> editingDialogues = new HashMap<String, DialogueTree>();
     DError cmdError = new DError(DErrorType.NOERROR, "");
     // ^ keyed by: player, dialogue tree. If another player tries to open the dialogue for editing,
     // block them
@@ -28,7 +27,7 @@ public class CmdFS implements CommandExecutor {
             }
 
             String subcommand = args[0];
-            DialogueTree activePDialogue = editingDialogues.get(writer.getName());
+            DialogueTree activePDialogue = main.getInstance().getDialogueManager().getEditingDialogueForPlayer(writer.getUniqueId());
             String returnString = "";
 
             switch (subcommand) {
@@ -54,10 +53,15 @@ public class CmdFS implements CommandExecutor {
 
                     // TD: check that the player doesn't already have something else open.
 
+                    String errString = main.getInstance().getDialogueManager().createNewDialogue(givenTreeName, writer.getUniqueId());
+
+                    /* old code
                     if (editingDialogues.get(writer.getName()) != null) {
                         writer.sendMessage("You are already editing a dialogue. Please close it before proceeding.");
                         return false;
                     }
+
+
 
                     // passed validity checks -- create a new dialogue with given name
                     DialogueTree newTree = new DialogueTree(givenTreeName, writer.getName());
@@ -69,6 +73,7 @@ public class CmdFS implements CommandExecutor {
                     editingDialogues.put(writer.getName(), newTree);
 
                     writer.sendMessage("New tree " + newTree.name + " created successfully!");
+                    */
                     break;
 
 

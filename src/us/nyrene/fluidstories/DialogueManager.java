@@ -1,17 +1,34 @@
 package us.nyrene.fluidstories;
+import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.Hash;
+
 import java.util.UUID;
 import java.util.HashMap;
+import java.util.List;
+
+class WriterStats {
+    UUID playerID;
+    short numDialoguesCreated = 0;
+    // map <"NPCName", "DialogueName">
+
+
+}
 
 public class DialogueManager {
+
     // trees actively being edited, can't be assigned to NPCs
-    private HashMap<String, DialogueTree> editingDialogues = new HashMap<String, DialogueTree>();
+    private HashMap<UUID, DialogueTree> editingDialogues = new HashMap<UUID, DialogueTree>();
 
     // trees that are no longer being edited/are finished. Can be assigned to NPCs
     private HashMap<String, DialogueTree> closedDialogues = new HashMap<String, DialogueTree>();
 
+    short maxDialoguesPerPlayer = 8; // have a property for this later
+
 
     public String saveDialogue(DialogueTree givenDialogue) {
-        //
+        // replace the talking dialogue hashmap entry with the current editing dialogue
+
+        // update all NPCs that have this dialogue
+        // main.getInstance().getNPCMgr().updateNPCsWithDialogue(dialogueName);
 
         // later: write to file
 
@@ -23,8 +40,50 @@ public class DialogueManager {
         // don't bother prompting to save for now - just remove it, user can
         // decide whether or not to save
 
+        if (getEditingDialogueForPlayer(playerID) != null) {
+            editingDialogues.remove(playerID);
+        }
+
         return "";
     }
+
+    public boolean playerIsEditingDialogue(UUID playerID) {
+        if (editingDialogues.get(playerID) != null ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public DialogueTree openDialogueForPlayer(String dialogueName, UUID playerID) {
+        // fetch the named tree for that player if possible, add it to editing dialogues
+
+        // if it exists, deep copy the dialogue to the editingDialogues list (don't inadvertently
+        // copy a reference and edit the talking version!)
+
+        return null;
+    }
+
+    public DialogueTree getEditingDialogueForPlayer(UUID playerID) {
+        // get this from the list of editing dialogues - this is for operating on active dialogues
+
+
+        return null;
+    }
+
+    public DialogueTree openSavedDialogueForPlayer(String dialogueName, UUID playerID) {
+        // later on, if it's not in the actively loaded saved dialogues (hashmap),
+        // then check saved files and load from there
+        // for now just assume it's in the active list of hashmaps
+        String fullDialogueName = playerID.toString() + "_" + dialogueName;
+        if (closedDialogues.get(fullDialogueName) == null) {
+            return null;
+        } else {
+            return closedDialogues.get(fullDialogueName);
+        }
+    }
+
+
 
     public String createNewDialogue(String newName, UUID playerID) {
         // file format will be 1 file per player. Top: list of player's trees
@@ -32,6 +91,34 @@ public class DialogueManager {
 
         // check for duplicate name
         // format of file name will be UUID
+
+
+        // see if this player has a dialogue open already
+        DialogueTree fetchedDialogue = getEditingDialogueForPlayer(playerID);
+
+        if (fetchedDialogue != null) {
+            return "Please close any current dialogues before creating or opening a new one.";
+        }
+
+        String fullDialogueName = newName + "_" + 
+
+        // check if a tree with that name already exists
+
+
+
+        return "";
+    }
+
+
+    public String deleteSavedDialogue(String dName, UUID playerID) {
+        // remember to delete all instances of this dialogue from NPCs
+
+        return "";
+    }
+
+
+    public String copyDialogueWithNameForPlayer(String existingDialogueName, String newDialogueName, UUID playerID) {
+        // check that player has a dialogue with given name
 
 
         return "";
