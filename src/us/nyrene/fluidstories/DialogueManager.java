@@ -24,11 +24,18 @@ public class DialogueManager {
     short maxDialoguesPerPlayer = 8; // have a property for this later
 
 
-    public String saveDialogue(DialogueTree givenDialogue) {
+    public String saveActiveDialogueForPlayer(UUID playerID) {
         // replace the talking dialogue hashmap entry with the current editing dialogue
+        DialogueTree fetchedDialogue = getEditingDialogueForPlayer(playerID);
+        if (fetchedDialogue == null) {
+            return "No active dialogue to save!";
+        }
 
-        // update all NPCs that have this dialogue
-        // main.getInstance().getNPCMgr().updateNPCsWithDialogue(dialogueName);
+        String fullDName = playerID.toString() + "_" + fetchedDialogue.name;
+        closedDialogues.put(fullDName, fetchedDialogue);
+
+        // TD: update all NPCs that have this dialogue once this function is implemented
+        // main.getInstance().getNPCMgr().updateNPCsWithUniqueDialogueName(fullDName);
 
         // later: write to file
 
@@ -100,13 +107,15 @@ public class DialogueManager {
             return "Please close any current dialogues before creating or opening a new one.";
         }
 
-        String fullDialogueName = newName + "_" + 
+        String fullDialogueName = playerID.toString() + "_" + newName;
+        if (closedDialogues.get(fullDialogueName) != null) {
+            return "You already have a dialogue with that name. Please choose a different name.";
+        }
 
-        // check if a tree with that name already exists
+        DialogueTree newDialogue = new DialogueTree(newName, playerID);
+        editingDialogues.put(playerID, newDialogue);
 
-
-
-        return "";
+        return "New tree " + newName + " created!";
     }
 
 
@@ -120,6 +129,22 @@ public class DialogueManager {
     public String copyDialogueWithNameForPlayer(String existingDialogueName, String newDialogueName, UUID playerID) {
         // check that player has a dialogue with given name
 
+
+        return "";
+    }
+
+
+    public String setNPCMsgInActiveDialogue(String newNPCMsg, UUID playerID) {
+        DialogueTree fetchedDialogue = getEditingDialogueForPlayer(playerID);
+        if (fetchedDialogue == null) {
+            return "No active dialogue to save!";
+        }
+
+        if (newNPCMsg == null || newNPCMsg == "") {
+            return "Can't set empty message!";
+        }
+
+        fetchedDialogue.currentNode.setMsg(newNPCMsg);
 
         return "";
     }

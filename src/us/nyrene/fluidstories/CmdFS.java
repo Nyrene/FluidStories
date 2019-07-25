@@ -16,6 +16,8 @@ public class CmdFS implements CommandExecutor {
     // need to update this to function similar to the plan for CmdTalkNPC:
     // use return strings to print to the player, and an error param.
 
+    // TD: there's a get instance of something in almost every switch case... refactor?
+
     @Override
     public boolean onCommand(CommandSender pSender, Command cmd, String strLbl, String[] args) {
         cmdError.reset();
@@ -44,36 +46,9 @@ public class CmdFS implements CommandExecutor {
                         return false;
                     }
 
-                    // see if that name already exists: naming scheme for dialogue
-                    // how to get the name: playername + argsname
-                    // later: allow for 3 params to load other DTrees, one with a diff player's name + name
+                    returnString = main.getInstance().getDialogueManager().createNewDialogue(givenTreeName, writer.getUniqueId());
+                    writer.sendMessage(returnString);
 
-                    // TD: check that another player doesn't currently have it open
-                    //      (how? use an editing attribute?)
-
-                    // TD: check that the player doesn't already have something else open.
-
-                    String errString = main.getInstance().getDialogueManager().createNewDialogue(givenTreeName, writer.getUniqueId());
-
-                    /* old code
-                    if (editingDialogues.get(writer.getName()) != null) {
-                        writer.sendMessage("You are already editing a dialogue. Please close it before proceeding.");
-                        return false;
-                    }
-
-
-
-                    // passed validity checks -- create a new dialogue with given name
-                    DialogueTree newTree = new DialogueTree(givenTreeName, writer.getName());
-
-                    // use the dialogue setter function to add it
-                    // don't add it to the master DialogueTree list.
-                    // add it to those being currently edited - saving + validating tree will add it to master
-                    // list.
-                    editingDialogues.put(writer.getName(), newTree);
-
-                    writer.sendMessage("New tree " + newTree.name + " created successfully!");
-                    */
                     break;
 
 
@@ -92,7 +67,7 @@ public class CmdFS implements CommandExecutor {
                         descString = descString + " " + args[i];
                     }
 
-                    activePDialogue.currentNode.msg = descString;
+                    String errString = main.getInstance().getDialogueManager().setNPCMsgInActiveDialogue(descString, writer.getUniqueId());
                     activePDialogue.printCurrentNode(writer);
 
                     break;

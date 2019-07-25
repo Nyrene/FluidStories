@@ -77,6 +77,11 @@ class NPCStatement {
         pStatements = new PlayerStatement[MAXPLAYERSTATEMENTS];
     }
 
+
+    public void setMsg(String newMsg) {
+        msg = newMsg;
+    }
+
 }
 
 public class DialogueTree {
@@ -91,7 +96,7 @@ public class DialogueTree {
                 // so, make sure to delete previous file names when someone renames or transfers
                 // ownership of their tree
     ArrayList<UUID> sharedWriters;
-    String playerOwner; // owns the file/tree - used for filename
+    UUID playerOwner; // owns the file/tree - used for filename
     boolean beingEdited = false;
 
 
@@ -99,9 +104,9 @@ public class DialogueTree {
     NPCStatement rootNode;
 
 
-    public DialogueTree(String givenTreeName, String playerName) {
+    public DialogueTree(String givenTreeName, UUID playerID) {
         name = givenTreeName; // this is assuming valid name
-        playerOwner = playerName;
+        playerOwner = playerID;
         rootNode = new NPCStatement();
         currentNode = rootNode;
 
