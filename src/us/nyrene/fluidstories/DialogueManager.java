@@ -73,9 +73,7 @@ public class DialogueManager {
 
     public DialogueTree getEditingDialogueForPlayer(UUID playerID) {
         // get this from the list of editing dialogues - this is for operating on active dialogues
-
-
-        return null;
+        return (editingDialogues.get(playerID));
     }
 
     public DialogueTree openSavedDialogueForPlayer(String dialogueName, UUID playerID) {
@@ -137,7 +135,7 @@ public class DialogueManager {
     public String setNPCMsgInActiveDialogue(String newNPCMsg, UUID playerID) {
         DialogueTree fetchedDialogue = getEditingDialogueForPlayer(playerID);
         if (fetchedDialogue == null) {
-            return "No active dialogue to save!";
+            return "No active dialogue!";
         }
 
         if (newNPCMsg == null || newNPCMsg == "") {
@@ -146,6 +144,10 @@ public class DialogueManager {
 
         fetchedDialogue.currentNode.setMsg(newNPCMsg);
 
+        return "";
+    }
+
+    public String addPMsgInActiveDialogue(String pMsg, UUID playerID) {
         return "";
     }
 

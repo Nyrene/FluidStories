@@ -56,10 +56,12 @@ public class CmdFS implements CommandExecutor {
                     // get the current node for the current player and dialogue tree
                     // at this point, tree should be in memory.
                     // TD: tree function for this
-                    if (activePDialogue == null) {
-                        writer.sendMessage("No active tree! Please create or load one.");
-                        return true;
-                    }
+                    //if (activePDialogue == null) {
+                    //    writer.sendMessage("No active tree! Please create or load one.");
+                    //    return true;
+                    //}
+
+
                     // get the args string
                     // TD: refactor into function; need to do this in another spot too
                     String descString = "";
@@ -68,7 +70,11 @@ public class CmdFS implements CommandExecutor {
                     }
 
                     String errString = main.getInstance().getDialogueManager().setNPCMsgInActiveDialogue(descString, writer.getUniqueId());
-                    activePDialogue.printCurrentNode(writer);
+                    if (errString != "") {
+                        writer.sendMessage(errString);
+                    } else {
+                        activePDialogue.printCurrentNode(writer);
+                    }
 
                     break;
 
