@@ -113,6 +113,7 @@ public class DialogueTree {
         beingEdited = true;
     }
 
+    // TD: delete this function, not using static hashmap anymore
     public static void addDialogueToExisting(DialogueTree newTree) {
         // check attributes exit
         if (newTree.name != null && newTree.playerOwner != null && newTree.rootNode != null) {
@@ -128,9 +129,7 @@ public class DialogueTree {
             return;
         }
 
-
     }
-
 
     // this does the same thing as getDialogueForPlayer, but takes the full filename "playername_treename"
     public static DialogueTree getDialogueForFName(String givenFName) {
@@ -148,12 +147,30 @@ public class DialogueTree {
         return getDialogueForFName(treeIDString);
     }
 
-    public void addPMsgToCurrent(String givenPMsg, DError cmdError) {
+    public static DialogueTree copyTree(DialogueTree treeToCopy) {
+        DialogueTree newTree = new DialogueTree(treeToCopy.name, treeToCopy.playerOwner);
+
+        // must figure out how to copy every node and child... recursive node copying function?
+        /*
+        name = givenTreeName; // this is assuming valid name
+        playerOwner = playerID;
+        rootNode = new NPCStatement();
+        currentNode = rootNode;
+
+        beingEdited = true;
+        */
+
+        return null;
+
+    }
+
+
+
+
+    public String addPMsgToCurrent(String givenPMsg) {
 
         if (currentNode.numPStatements == NPCStatement.MAXPLAYERSTATEMENTS) {
-            cmdError.setMsg("Can't add player message; have reached limit.");
-            cmdError.type = DErrorType.INVALIDTREE;
-            return;
+            return "You have reached the maximum number of player statements for this node.";
         }
 
 
@@ -161,15 +178,15 @@ public class DialogueTree {
         currentNode.numPStatements++;
         currentNode.pStatements[currentNode.numPStatements - 1] = newPStatement;
 
+        return "";
+
     }
 
     //activePDialogue.addNPCMsgToPmsg((selectedPNum - 1), thisNPCMsg, cmdError);
-    public void addNPCMsgToPMsg(int givenPIndex, String givenNPCMsg, DError error) {
+    public String addNPCMsgToPMsg(int givenPIndex, String givenNPCMsg) {
 
         if (givenPIndex >= currentNode.numPStatements) {
-            error.type = DErrorType.OUTOFBOUNDS;
-            error.msg = "Please select a valid player statement to add this message to.";
-            return;
+            return "Please select a valid number.";
         }
 
 
@@ -177,18 +194,7 @@ public class DialogueTree {
         newNPCStatement.playerPrevious = currentNode.pStatements[givenPIndex];
         currentNode.pStatements[givenPIndex].npcNode = newNPCStatement;
 
-
-/*
- NPCStatement newNPCStatement = new NPCStatement();
-                    // TD: proper constructors, currently the dialogue class sets stuff when
-                    // new dialogues are created so need a blank one and a msg one
-                    newNPCStatement.msg = thisNPCMsg;
-                    newNPCStatement.playerPrevious = activePDialogue.currentNode.pStatements[selectedPNum - 1];
-
-                    activePDialogue.currentNode.pStatements[selectedPNum - 1].npcNode = newNPCStatement;
- */
-
-
+        return "";
     }
 
     // trying out returning a string msg for errors these next two functions...
@@ -212,15 +218,15 @@ public class DialogueTree {
 
     }
 
-    public String delPStatement(int givenPNum) {
+    public String delPStatement(int givenPIndex) {
         if (currentNode.numPStatements == 0) return "No player statements to delete!";
-        if (currentNode.pStatements[givenPNum] == null) return "Invalid selection.";
+        if (currentNode.pStatements[givenPIndex] == null) return "Invalid selection.";
 
         //see below pseudocode - must also delete everything attached to those nodes
         // to avoid memory leaks!
         // unless Java takes care of it automatically?
         //if (givenPNum)
-        currentNode.pStatements[givenPNum] = null;
+        currentNode.pStatements[givenPIndex] = null;
         currentNode.numPStatements -= 1;
         return "";
     }

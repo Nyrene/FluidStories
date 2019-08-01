@@ -36,7 +36,8 @@ public class CmdTalkNPC implements CommandExecutor {
             // check that the args are correct: one argument, the name of the NPC
             // This command should open the dialogue tree for that player (add a placemarker for them)
             // and then the /say command will be used to select dialogue options.
-            if (args.length < 1) {
+            if (args.length != 1) {
+                pSender.sendMessage("Usage: /talknpc <npcname>");
                 return false;
             }
 

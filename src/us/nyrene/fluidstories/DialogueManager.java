@@ -9,8 +9,6 @@ class WriterStats {
     UUID playerID;
     short numDialoguesCreated = 0;
     // map <"NPCName", "DialogueName">
-
-
 }
 
 public class DialogueManager {
@@ -20,6 +18,8 @@ public class DialogueManager {
 
     // trees that are no longer being edited/are finished. Can be assigned to NPCs
     private HashMap<String, DialogueTree> closedDialogues = new HashMap<String, DialogueTree>();
+
+    private HashMap<UUID, DialogueTree> speakingDialogues = new HashMap<UUID, DialogueTree>();
 
     short maxDialoguesPerPlayer = 8; // have a property for this later
 
@@ -148,6 +148,79 @@ public class DialogueManager {
     }
 
     public String addPMsgInActiveDialogue(String pMsg, UUID playerID) {
+        DialogueTree fetchedDialogue = getEditingDialogueForPlayer(playerID);
+        if (fetchedDialogue == null) {
+            return "No active dialogue!";
+        }
+
+        if (pMsg == null || pMsg == "") {
+            return "Can't set empty message!";
+        }
+
+        fetchedDialogue.addPMsgToCurrent(pMsg);
+
+        return "";
+    }
+
+    public String selectForActiveDialogue(int selection, UUID playerID) {
+        DialogueTree fetchedDialogue = getEditingDialogueForPlayer(playerID);
+        if (fetchedDialogue == null) {
+            return "No active dialogue!";
+        }
+
+        return fetchedDialogue.selPStatement(selection - 1);
+
+    }
+
+
+    public String addNPCMsgToPMsgForActiveDialogue(String msg, int selectedPMsg, UUID playerID) {
+        DialogueTree fetchedDialogue = getEditingDialogueForPlayer(playerID);
+        if (fetchedDialogue == null) {
+            return "No active dialogue!";
+        }
+
+        fetchedDialogue.addNPCMsgToPMsg(selectedPMsg - 1, msg);
+
+        return "";
+    }
+
+    public String startConversationWithNPCForPlayer(String npcName, UUID playerID) {
+        // get the dialogue ID for that npc, if it exists
+        String returnedDialogueID = main.getInstance().getNPCMgr().getDialogueIDForNPCWithName(npcName);
+        String errString = "This person is unable to talk at the moment.";
+
+        if (returnedDialogueID == null) {
+            return errString;
+        }
+        else {
+            // get conversation from UUID. For now, just pull it from the closedDialogues.
+            DialogueTree fetchedDialogue = closedDialogues.get(returnedDialogueID);
+            if (fetchedDialogue == null) {
+                return errString;
+            }
+
+            // copy the dialogue with that name and put it in the hashmaps for that player.
+
+            // DialogueTree.copyTree(fetchedTree, newTree)
+            //speakingDialogues.put(playerID, test);
+
+            // if the player already has a conversation open, remove it
+
+
+            // return the node text. TD: change the printNode function so it returns a string,
+            // rather than requiring the player object to be passed to it
+
+        }
+
+        return "";
+    }
+
+    public String closeActivePlayerConversation(UUID playerID) {
+        if (speakingDialogues.get(playerID) != null) {
+            speakingDialogues.remove(playerID); // according to stackOF the memory used by the object
+                                                // will be freed eventually?
+        }
+
         return "";
     }
 

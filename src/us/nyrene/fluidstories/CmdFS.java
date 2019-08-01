@@ -55,12 +55,6 @@ public class CmdFS implements CommandExecutor {
                 case "setnpcmsg":
                     // get the current node for the current player and dialogue tree
                     // at this point, tree should be in memory.
-                    // TD: tree function for this
-                    //if (activePDialogue == null) {
-                    //    writer.sendMessage("No active tree! Please create or load one.");
-                    //    return true;
-                    //}
-
 
                     // get the args string
                     // TD: refactor into function; need to do this in another spot too
@@ -89,8 +83,7 @@ public class CmdFS implements CommandExecutor {
                         pMsgString = pMsgString + " " + args[i];
                     }
 
-                    activePDialogue.addPMsgToCurrent(pMsgString, cmdError);
-                    if (cmdError.type != DErrorType.NOERROR) writer.sendMessage(cmdError.msg);
+                    errString = main.getInstance().getDialogueManager().addPMsgInActiveDialogue(pMsgString, writer.getUniqueId());
 
                     activePDialogue.printCurrentNode(writer);
                     break;
@@ -108,39 +101,27 @@ public class CmdFS implements CommandExecutor {
                         thisNPCMsg = thisNPCMsg + " " + args[i];
                     }
                     int PIndex = selectedPNum - 1;
-                    if (PIndex <= 0 || PIndex > NPCStatement.MAXPLAYERSTATEMENTS) {
+                    if (PIndex < 0 || PIndex >= NPCStatement.MAXPLAYERSTATEMENTS) {
                         writer.sendMessage("Please choose a number within the available range.");
                         return true;
                     }
 
-                    activePDialogue.addNPCMsgToPMsg((PIndex), thisNPCMsg, cmdError);
-                    if (cmdError.type != DErrorType.NOERROR) {
-                        writer.sendMessage(cmdError.msg);
-                    }
+                    main.getInstance().getDialogueManager().addNPCMsgToPMsgForActiveDialogue(thisNPCMsg, selectedPNum, writer.getUniqueId());
                     activePDialogue.printCurrentNode(writer);
                     break;
 
                 case "select":
-                    if (activePDialogue == null) {
-                        writer.sendMessage("No active tree! Please create or load one.");
-                        return true;
-                    }
-
                     if (args.length != 2) {
                         writer.sendMessage("usage: /fs select <#>");
                     }
 
                     int selectedNum = Integer.valueOf(args[1]);
-                    if (selectedNum < 1 || selectedNum > NPCStatement.MAXPLAYERSTATEMENTS) {
-                        writer.sendMessage("Please use a number in a valid range.");
-                        return true;
+                    errString = main.getInstance().getDialogueManager().selectForActiveDialogue(selectedNum, writer.getUniqueId());
+                    if (errString != "") {
+                        writer.sendMessage(errString);
                     }
-
-                    // go to next node if it exists, use the class for it
-                    // TD: update this method to follow returnstring/error/etc
-                    returnString =  activePDialogue.selPStatement(selectedNum - 1);
-                    if (returnString != "") writer.sendMessage(returnString);
                     activePDialogue.printCurrentNode(writer);
+
                     break;
 
                 case "back":

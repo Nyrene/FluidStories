@@ -142,8 +142,18 @@ public class NPCManager {
         //}
     }
 
-    public void startConversationWithNPCForPlayer(String npcName, UUID playerID) {
+    public boolean isNPCWithNameInRangeOfLocation(String NPCName, Location location) {
 
+        return true;
+    }
+
+    public String getDialogueIDForNPCWithName(String npcName) {
+        if (activeNPCs.get(npcName) == null) {
+            return "";
+        }
+
+        NPCData fetchedNPC = activeNPCs.get(npcName);
+        return fetchedNPC.getDialogueTreeID();
     }
 
 }

@@ -37,7 +37,8 @@ public class NPCData {
     String description;
     UUID entityID;
     Location location;
-    DialogueTree dialogue;
+    // DialogueTree dialogue;
+    String dialogueTreeID = "";
     UUID playerOwner;
 
     public NPCData(String givenName, UUID givenEntityID, Location givenLocation) {
@@ -69,14 +70,16 @@ public class NPCData {
         return location;
     }
 
-    public void setDialogue(DialogueTree givenDialogue) {
-        if (givenDialogue != null) {
-            dialogue = givenDialogue;
+    public void setDialogue(String newDialogueID) {
+        if (newDialogueID != null) {
+            dialogueTreeID = newDialogueID;
         }
-
-        // error, otherwise
+        // TD: error if null
     }
 
+    public String getDialogueTreeID() {
+        return dialogueTreeID;
+    }
 
 
 }
