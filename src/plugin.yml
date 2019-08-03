@@ -4,7 +4,7 @@ author: Rachael Little
 main: us.nyrene.fluidstories.main
 api-version: 1.14
 
-# Replace "kit" with the name of your command.
+
 commands:
     spawnnpc:
       description: Creates an NPC with the given name at your look location.
@@ -19,8 +19,16 @@ commands:
       usage: /looknpc <name>
 
     removenpc:
-      description: removes the named NPC.
+      description: Removes the named NPC.
       usage: /removenpc <name>
+
+    talknpc:
+      description: Starts a conversation with the named NPC.
+      usage: /talknpc <name>
+
+    say:
+      description: Once a conversation has been started, selects dialogue options.
+      usage: /say <number>
 
     fs:
       description: Command set for creating and editing dialogues
