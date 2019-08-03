@@ -19,9 +19,14 @@ public class DialogueManager {
     // trees that are no longer being edited/are finished. Can be assigned to NPCs
     private HashMap<String, DialogueTree> closedDialogues = new HashMap<String, DialogueTree>();
 
+    // is having this map a bad practice? it's probably faster than doing multiple fetches
+    // each time the player executes a dialogue command?
+    // it feels wrong to repeatedly pull instances of dialogues just for read-only actions. Perhaps
+    // callbacks make more sense. Or I'm overthinking a small side project.
     private HashMap<UUID, DialogueTree> speakingDialogues = new HashMap<UUID, DialogueTree>();
 
     short maxDialoguesPerPlayer = 8; // have a property for this later
+
 
 
     public String saveActiveDialogueForPlayer(UUID playerID) {
@@ -203,26 +208,29 @@ public class DialogueManager {
             // there will be only once instance of each speaking dialogue.
             // these dialogues have bookmarks for each player.
 
-            fetchedDialogue.playerStartedConversation(playerID);
-
-            // if the player already has a conversation open, remove it
-
-
-            // return the node text. TD: change the printNode function so it returns a string,
-            // rather than requiring the player object to be passed to it
+            speakingDialogues.put(playerID, fetchedDialogue);
+            return fetchedDialogue.playerStartedConversation(playerID);
 
         }
-
-        return "";
     }
 
     public String closeActivePlayerConversation(UUID playerID) {
         if (speakingDialogues.get(playerID) != null) {
-            speakingDialogues.remove(playerID); // according to stackOF the memory used by the object
-                                                // will be freed eventually?
+            speakingDialogues.remove(playerID);
+        }
+        return "";
+    }
+
+
+    public String playerSelected(Integer selection, UUID playerID) {
+        if (playerID == null) return "";
+
+        if (speakingDialogues.get(playerID) == null) {
+            return "You are not currently speaking to anyone.";
         }
 
-        return "";
+        return speakingDialogues.get(playerID).playerSelectedDialogueOption(selection, playerID);
+
     }
 
 }
