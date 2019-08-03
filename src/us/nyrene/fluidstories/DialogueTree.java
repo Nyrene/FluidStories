@@ -90,6 +90,10 @@ public class DialogueTree {
     // changing: the above so that only finished dialogues go here, to be summoned for NPCs.
     // currently open/in-editing dialogues, which are not finished, will be saved to the FS
     // command's static hash map.
+    // TD: remove above. DialogueManager has this
+
+    private static HashMap<UUID, NPCStatement> playerBookmarks = new HashMap<UUID, NPCStatement>();
+    // keeps track of where each player is in the dialogue
 
     String name;
     String ID; // this is also the filename it is saved under... which may be a problem later
@@ -100,7 +104,7 @@ public class DialogueTree {
     boolean beingEdited = false;
 
 
-    NPCStatement currentNode;
+    NPCStatement currentNode; // this is for editing. probably need to change to editingNode or something similar
     NPCStatement rootNode;
 
 
@@ -148,6 +152,8 @@ public class DialogueTree {
     }
 
     public static DialogueTree copyTree(DialogueTree treeToCopy) {
+        // on second thought, copying the tree for each player may be costly. Since
+        // only one dialogue exists, shared by ID to all NPCs, may isntead
         DialogueTree newTree = new DialogueTree(treeToCopy.name, treeToCopy.playerOwner);
 
         // must figure out how to copy every node and child... recursive node copying function?
@@ -222,9 +228,7 @@ public class DialogueTree {
         if (currentNode.numPStatements == 0) return "No player statements to delete!";
         if (currentNode.pStatements[givenPIndex] == null) return "Invalid selection.";
 
-        //see below pseudocode - must also delete everything attached to those nodes
-        // to avoid memory leaks!
-        // unless Java takes care of it automatically?
+        //see below pseudocode
         //if (givenPNum)
         currentNode.pStatements[givenPIndex] = null;
         currentNode.numPStatements -= 1;
@@ -266,6 +270,8 @@ public class DialogueTree {
 
 
     // utility/navigation, also for editing use
+    // TD: change to return string that contains current node info,
+    // rather than passing the player object in
     public void printCurrentNode(Player player) {
         // print the current node's msg
         if (currentNode == null) {
@@ -292,45 +298,89 @@ public class DialogueTree {
 
     }
 
-    /* --- rewriting below, as now NPCs will have their own instance of a tree.
-    //********* functions for players speaking to NPCs.
-    //********* these are a mess. Must fix them next
-    // give player instance or return a string to print to the player?
-    // this function: probably should consolidate with printCurrentNode()
-    // maybe add a pass by reference endDialogue parameter?
-        // conditions for ending: error, invalid, or no player responses available
-    public void printNodeForNPCName(String npcName, Player player) {
-        if (currentNode == null) {
-            throw new NullPointerException("Error: tree's current node is null");
-            // close the active tree for that player
+    // TD: this function needs major refactoring
+    public String playerSelectedDialogueOption(int selection, UUID playerID) {
+        // get the node for this player, and if it's a valid option, advance it
+        // return the text from here, because if the next NPC node is null, the dialogue
+        // needs to end.
+
+        NPCStatement fetchedNode = playerBookmarks.get(playerID);
+        if (selection < 1 || selection > fetchedNode.numPStatements) {
+            return "Invalid selection";
         }
 
-        if (currentNode.msg == null || currentNode.msg == "") {
-            player.sendMessage(npcName + ": ");
+        String returnStr;
+        selection --; // use as index now
+
+        // two primary cases: either there's an NPC node for that option, or there isn't one.
+        // if there isn't, the conversation ends, and the player sees an empty string.
+
+        if (fetchedNode.pStatements[selection].npcNode == null) {
+            returnStr =  "You: " + fetchedNode.pStatements[selection].msg;
+            playerEndedConversation(playerID);
         } else {
-            player.sendMessage(npcName + ": " + currentNode.msg);
+            // if there is a node, and that NPC node has no player options, then the conversation also ends,
+            // and the player sees the NPC message. .....
+            NPCStatement nextNode = fetchedNode.pStatements[selection].npcNode;
+
+            if (nextNode.pStatements.length == 0) {
+                returnStr = nextNode.msg;
+                playerEndedConversation(playerID);
+            } else {
+                // .... otherwise, set the player's current node to the selection, and return options for that.
+                playerBookmarks.put(playerID, nextNode);
+                returnStr = "You: " + fetchedNode.pStatements[selection];
+                returnStr += "\n" + getNodeTalkingTextForPlayer(playerID);
+
+            }
+
+        }
+
+        return returnStr;
+
+    }
+
+
+    public String playerStartedConversation(UUID newPlayerID) {
+        // create a new bookmark for this player, and return the convo string.
+        playerBookmarks.put(newPlayerID, rootNode);
+
+        return getNodeTalkingTextForPlayer(newPlayerID);
+    }
+
+    public String playerEndedConversation(UUID thisPlayerID) {
+        playerBookmarks.remove(thisPlayerID);
+
+        return "";
+    }
+
+    public String getNodeTalkingTextForPlayer(UUID thisPlayerID) {
+        // similar to printCurrentNode for editing, but if we're on a null or empty node,
+        // return an empty string.
+        // also, no signifier for if an option has an NPC node attached to it.
+
+        if (currentNode == null) {
+            throw new NullPointerException("Error: tree's current node is null");
+        }
+
+        String nodeString = "";
+
+        if (currentNode.msg == null || currentNode.msg == "") {
+            nodeString = "NPC: ";
+        } else {
+            nodeString = "NPC: " + currentNode.msg;
         }
 
         // print all player responses - add * if pmsg has an npc msg tied to it
-        String hasNPCMsg = "";
         if (currentNode.pStatements.length > 0) {
             for (int i = 0; i < currentNode.numPStatements; i++) {
-                if (currentNode.pStatements[i].npcNode != null) {
-                    hasNPCMsg = "* ";
-                } else { hasNPCMsg = "";}
-
-                player.sendMessage(hasNPCMsg + (i + 1) + ". " + currentNode.pStatements[i].msg);
+                nodeString += ((i + 1) + ". " + currentNode.pStatements[i].msg);
             }
         }
+
+        return nodeString;
     }
 
-    public String sayPlayerResponse(int givenResponse) {
-        if (currentNode.numPStatements == 0) return "No player statements to select!";
-        if (currentNode.pStatements[givenResponse] == null) return "Invalid selection.";
 
-        currentNode = currentNode.pStatements[givenResponse].npcNode;
-        return "";
-    }
-    */
 }
 

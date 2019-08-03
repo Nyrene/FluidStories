@@ -42,8 +42,8 @@ public class CmdTalkNPC implements CommandExecutor {
             }
 
             Player writer = (Player) pSender;
-            main.getInstance().getNPCMgr().startConversationWithNPCForPlayer(args[0], writer.getUniqueId());
-
+            String result = main.getInstance().getDialogueManager().startConversationWithNPCForPlayer(args[0], writer.getUniqueId());
+            writer.sendMessage(result);
         }
 
         return true;

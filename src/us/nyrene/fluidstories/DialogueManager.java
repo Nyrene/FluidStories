@@ -199,10 +199,11 @@ public class DialogueManager {
                 return errString;
             }
 
-            // copy the dialogue with that name and put it in the hashmaps for that player.
+            // new plan:
+            // there will be only once instance of each speaking dialogue.
+            // these dialogues have bookmarks for each player.
 
-            // DialogueTree.copyTree(fetchedTree, newTree)
-            //speakingDialogues.put(playerID, test);
+            fetchedDialogue.playerStartedConversation(playerID);
 
             // if the player already has a conversation open, remove it
 
