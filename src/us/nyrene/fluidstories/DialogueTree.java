@@ -156,7 +156,11 @@ public class DialogueTree {
         // only one dialogue exists, shared by ID to all NPCs, may isntead
         DialogueTree newTree = new DialogueTree(treeToCopy.name, treeToCopy.playerOwner);
 
-        // must figure out how to copy every node and child... recursive node copying function?
+        // create new node for the tree's root. Node copy function is recursive
+        newTree.rootNode = copyNode(treeToCopy.rootNode);
+
+
+
         /*
         name = givenTreeName; // this is assuming valid name
         playerOwner = playerID;
@@ -168,6 +172,30 @@ public class DialogueTree {
 
         return null;
 
+    }
+
+    public static NPCStatement copyNode(NPCStatement nodeToCopy) {
+        NPCStatement newNode = new NPCStatement();
+        // copy basic attributes
+        newNode.setMsg(nodeToCopy.msg);
+        newNode.numPStatements = nodeToCopy.numPStatements;
+
+        // pStatements array is already set to max size.
+        // if the MAXPSTATEMENT info doesn't match up, abort
+        if (nodeToCopy.numPStatements > NPCStatement.MAXPLAYERSTATEMENTS) {
+            return null;
+        }
+
+        for (int i = 0; i < nodeToCopy.numPStatements; i++) {
+            // copy p statements, then for each one, if there is
+            // an NPC node, call this function again
+            newNode.pStatements[i] = new PlayerStatement(nodeToCopy.pStatements[i].msg, newNode);
+            if (nodeToCopy.pStatements[i].npcNode != null) {
+                newNode.pStatements[i].npcNode = copyNode(nodeToCopy.pStatements[i].npcNode);
+            }
+        }
+        
+        return newNode;
     }
 
 
