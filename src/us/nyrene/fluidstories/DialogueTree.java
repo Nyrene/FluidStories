@@ -194,7 +194,7 @@ public class DialogueTree {
                 newNode.pStatements[i].npcNode = copyNode(nodeToCopy.pStatements[i].npcNode);
             }
         }
-        
+
         return newNode;
     }
 

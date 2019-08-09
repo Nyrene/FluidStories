@@ -141,12 +141,16 @@ public class CmdFS implements CommandExecutor {
                     activePDialogue.printCurrentNode(writer);
                     break;
 
-                case "save":
-                    //
+                case "open":
+                    // give the name, player ID to dialogue manager for it to open
+                    break;
+
+                case "saveandclose":
+                    main.getInstance().getDialogueManager().saveAndCloseActiveDialogueForPlayer(writer.getUniqueId());
                     break;
 
                 case "close":
-                    // add it to list of active/available dialogues for player to assign
+                    // remove it from player's editing dialogue without saving
                     break;
 
                 case "help":

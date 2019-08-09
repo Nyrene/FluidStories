@@ -221,7 +221,20 @@ public class DialogueManager {
         return "";
     }
 
+    public String saveAndCloseActiveDialogueForPlayer(UUID playerID) {
+        // copy the active dialogue to editing dialogues, adn remove it from editing hashmap
+        if (editingDialogues.get(playerID) == null) {
+            return "No active dialogue to close";
+        }
 
+        DialogueTree copiedDTree = DialogueTree.copyTree(editingDialogues.get(playerID));
+        String DUniqueName = playerID + "_" + copiedDTree.name;
+        closedDialogues.put(DUniqueName, copiedDTree);
+
+        return "";
+    }
+
+    // TD: rename to playerSelectedPMsg
     public String playerSelected(Integer selection, UUID playerID) {
         if (playerID == null) return "";
 
