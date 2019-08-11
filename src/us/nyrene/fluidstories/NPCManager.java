@@ -130,16 +130,21 @@ public class NPCManager {
         fetchedNPC.setNPCDescription(newDesc);
     }
 
-    public void assignDialogueToNPCForPlayer(String npcName, String dialogueTreeName, UUID playerID, DError error) {
+    public String assignDialogueToNPCForPlayer(String npcName, String dialogueTreeName, UUID playerID) {
+        DError error = new DError();
         NPCData fetchedNPC = getNPCDataWithNameForPlayer(npcName, playerID, error);
 
-        if (fetchedNPC == null) {
-            return; // TD replace with error
+        if (fetchedNPC == null || error.type != DErrorType.NOERROR) {
+            return error.msg;
+        } else {
+            String dialogueFullName = playerID + "_" + dialogueTreeName;
+            if (main.getInstance().getDialogueManager().dialogueWithNameExists(dialogueFullName) == true) {
+                fetchedNPC.setDialogue(dialogueFullName);
+            }
+
         }
 
-        //if (newDialogue != null) {
-            // fetchedNPC.assignDialogue(dialogue);
-        //}
+        return "";
     }
 
     public boolean isNPCWithNameInRangeOfLocation(String NPCName, Location location) {

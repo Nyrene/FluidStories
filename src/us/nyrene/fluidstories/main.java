@@ -11,6 +11,9 @@ public class main extends JavaPlugin {
     CmdFS fsCmd = new CmdFS();
     CmdSetNPCDesc npcDescCmd = new CmdSetNPCDesc();
     CmdRemoveNPC rmNPCCMD = new CmdRemoveNPC();
+    CmdTalkNPC talkCmd = new CmdTalkNPC();
+    CmdSay sayCmd = new CmdSay();
+    CmdSetNPCDialogue setDialogueCmd = new CmdSetNPCDialogue();
 
     @Override
     public void onEnable() {
@@ -19,8 +22,9 @@ public class main extends JavaPlugin {
         this.getCommand("looknpc").setExecutor(new CmdLookNPC());
         this.getCommand("fs").setExecutor(fsCmd);
         this.getCommand("removenpc").setExecutor(rmNPCCMD);
-        //this.getCommand("talknpc").setExecutor(talkCmd);
-        //this.getCommand("say").setExecutor(sayCmd);
+        this.getCommand("talknpc").setExecutor(talkCmd);
+        this.getCommand("say").setExecutor(sayCmd);
+        this.getCommand("setnpcdialogue").setExecutor(setDialogueCmd);
     }
 
     @Override

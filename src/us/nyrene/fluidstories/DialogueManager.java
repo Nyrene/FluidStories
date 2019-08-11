@@ -28,6 +28,14 @@ public class DialogueManager {
     short maxDialoguesPerPlayer = 8; // have a property for this later
 
 
+    // for closed dialogues... should rename to make more explicit?
+    public boolean dialogueWithNameExists(String dialogueName) {
+        if (closedDialogues.get(dialogueName) != null) {
+            return true;
+        }
+
+        return false;
+    }
 
     public String saveActiveDialogueForPlayer(UUID playerID) {
         // replace the talking dialogue hashmap entry with the current editing dialogue

@@ -33,3 +33,8 @@ commands:
     fs:
       description: Command set for creating and editing dialogues
       usage: /fs <subcommand> <args>
+
+
+    setnpcdialogue:
+      description: Sets the dialogue for an existing NPC
+      usage: /setnpcdialogue <npc> <dialogue>
