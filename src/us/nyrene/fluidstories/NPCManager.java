@@ -144,7 +144,7 @@ public class NPCManager {
 
         }
 
-        return "";
+        return "Dialogue assigned to NPC.";
     }
 
     public boolean isNPCWithNameInRangeOfLocation(String NPCName, Location location) {

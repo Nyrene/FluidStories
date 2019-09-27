@@ -239,16 +239,18 @@ public class DialogueManager {
         String DUniqueName = playerID + "_" + copiedDTree.name;
         closedDialogues.put(DUniqueName, copiedDTree);
 
-        return "";
+        return "Saved and closed dialogue" + copiedDTree.name + ".";
     }
 
     // TD: rename to playerSelectedPMsg
     public String playerSelected(Integer selection, UUID playerID) {
         if (playerID == null) return "";
+        DialogueTree fetchedDialogue = speakingDialogues.get(playerID);
 
-        if (speakingDialogues.get(playerID) == null) {
+        if (fetchedDialogue == null) {
             return "You are not currently speaking to anyone.";
         }
+
 
         return speakingDialogues.get(playerID).playerSelectedDialogueOption(selection, playerID);
 

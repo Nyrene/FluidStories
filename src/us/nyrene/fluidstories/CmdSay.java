@@ -23,7 +23,7 @@ public class CmdSay implements CommandExecutor {
             }
 
             Player player = (Player) pSender;
-            int sel = Integer.valueOf(args[1]);
+            int sel = Integer.valueOf(args[0]);
 
             String result = main.getInstance().getDialogueManager().playerSelected(sel, player.getUniqueId());
             player.sendMessage(result);

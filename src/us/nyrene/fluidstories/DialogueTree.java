@@ -55,10 +55,17 @@ class PlayerStatement {
         } else {
             System.out.println("Can't add null NPCStatement in PlayerStatement()");
         }
+    }
 
+    // copy constructor
+    public PlayerStatement(PlayerStatement pStatementToCopy, NPCStatement newNPCPrevious) {
+        msg = pStatementToCopy.msg;
+        npcPrevious = newNPCPrevious;
+        npcNode = new NPCStatement(pStatementToCopy.npcNode, this);
     }
 }
 
+// other mentions of "node" refer to this.  should probably change names
 class NPCStatement {
     public static final short MAXPLAYERSTATEMENTS = 5;
 
@@ -70,6 +77,23 @@ class NPCStatement {
     public NPCStatement() {
         msg = "";
         pStatements = new PlayerStatement[MAXPLAYERSTATEMENTS];
+    }
+
+    // copy constructor
+    public NPCStatement(NPCStatement nodeToCopy, PlayerStatement newPlayerPrevious) {
+        msg = nodeToCopy.msg;
+        pStatements = new PlayerStatement[MAXPLAYERSTATEMENTS];
+        int numPStatements = nodeToCopy.numPStatements;
+
+        for (int i = 0; i < numPStatements; i++) {
+            // recursively copy player statements, which will in turn copy each node
+            pStatements[i] = new PlayerStatement(nodeToCopy.pStatements[i], this);
+        }
+
+        if (newPlayerPrevious != null) {
+            playerPrevious = newPlayerPrevious;
+        }
+
     }
 
     public NPCStatement(String givenMsg) {
@@ -156,24 +180,15 @@ public class DialogueTree {
         // only one dialogue exists, shared by ID to all NPCs, may isntead
         DialogueTree newTree = new DialogueTree(treeToCopy.name, treeToCopy.playerOwner);
 
-        // create new node for the tree's root. Node copy function is recursive
-        newTree.rootNode = copyNode(treeToCopy.rootNode);
-
-
-
-        /*
-        name = givenTreeName; // this is assuming valid name
-        playerOwner = playerID;
-        rootNode = new NPCStatement();
-        currentNode = rootNode;
-
-        beingEdited = true;
-        */
-
-        return null;
+        // create new node for the tree's root. Copy constructors will recursively populate nodes.
+        // phasing out old copyNode function as it didn't work...
+        newTree.rootNode = new NPCStatement(treeToCopy.rootNode, null);
+        return newTree;
 
     }
 
+    // TBDeleted once recursive copy constructors have been tested
+    /*
     public static NPCStatement copyNode(NPCStatement nodeToCopy) {
         NPCStatement newNode = new NPCStatement();
         // copy basic attributes
@@ -197,7 +212,7 @@ public class DialogueTree {
 
         return newNode;
     }
-
+    */
 
 
 
@@ -333,12 +348,21 @@ public class DialogueTree {
         // needs to end.
 
         NPCStatement fetchedNode = playerBookmarks.get(playerID);
+        if (fetchedNode == null) {
+            return "";
+        }
         if (selection < 1 || selection > fetchedNode.numPStatements) {
             return "Invalid selection";
         }
 
         String returnStr;
         selection --; // use as index now
+        System.out.println("DEBUG: number of pstatements is: " + fetchedNode.numPStatements);
+        if (fetchedNode.pStatements[0] == null) {
+            System.out.println("first pmsg is null");
+        } else {
+            System.out.println("first pmsg is NOT null");
+        }
 
         // two primary cases: either there's an NPC node for that option, or there isn't one.
         // if there isn't, the conversation ends, and the player sees an empty string.
@@ -380,6 +404,14 @@ public class DialogueTree {
         playerBookmarks.remove(thisPlayerID);
 
         return "";
+    }
+
+    public boolean hasActivePlayer(UUID playerID) {
+        if (playerBookmarks.get(playerID) != null) {
+            return true;
+        }
+
+        return false;
     }
 
     public String getNodeTalkingTextForPlayer(UUID thisPlayerID) {
