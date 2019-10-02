@@ -42,7 +42,7 @@ class PlayerStatement {
     NPCStatement npcPrevious;
     NPCStatement npcNode;
 
-    public PlayerStatement(String givenMsg, NPCStatement givenNode) {
+    public PlayerStatement(String givenMsg, NPCStatement givenPrevNode) {
         if (givenMsg != null) {
             msg = givenMsg;
         } else {
@@ -50,18 +50,28 @@ class PlayerStatement {
             msg = "";
         }
 
-        if (givenNode != null) {
-            npcPrevious = givenNode;
+        if (givenPrevNode != null) {
+            npcPrevious = givenPrevNode;
         } else {
             System.out.println("Can't add null NPCStatement in PlayerStatement()");
         }
     }
 
-    // copy constructor
+
+    // copy constructor - this won't work, have to set the playerPrevious using the new object.
+    // must use other copy function
     public PlayerStatement(PlayerStatement pStatementToCopy, NPCStatement newNPCPrevious) {
         msg = pStatementToCopy.msg;
         npcPrevious = newNPCPrevious;
-        npcNode = new NPCStatement(pStatementToCopy.npcNode, this);
+    }
+
+    public static PlayerStatement copyPStatement(PlayerStatement pStatementToCopy, NPCStatement newNPCPrevious) {
+        PlayerStatement newPStatement = new PlayerStatement(pStatementToCopy, newNPCPrevious);
+        if (pStatementToCopy.npcNode != null) {
+            newPStatement.npcNode = new NPCStatement(pStatementToCopy.npcNode, pStatementToCopy);
+        }
+
+        return newPStatement;
     }
 }
 
@@ -81,13 +91,18 @@ class NPCStatement {
 
     // copy constructor
     public NPCStatement(NPCStatement nodeToCopy, PlayerStatement newPlayerPrevious) {
+        System.out.println("test!");
+        if (nodeToCopy == null) {
+            System.out.println("DEBUG: In NPCStatement copy constructor, node is null");
+        }
+
         msg = nodeToCopy.msg;
         pStatements = new PlayerStatement[MAXPLAYERSTATEMENTS];
-        int numPStatements = nodeToCopy.numPStatements;
+        numPStatements = nodeToCopy.numPStatements;
 
         for (int i = 0; i < numPStatements; i++) {
             // recursively copy player statements, which will in turn copy each node
-            pStatements[i] = new PlayerStatement(nodeToCopy.pStatements[i], this);
+            pStatements[i] = PlayerStatement.copyPStatement(nodeToCopy.pStatements[i], this);
         }
 
         if (newPlayerPrevious != null) {
@@ -182,7 +197,16 @@ public class DialogueTree {
 
         // create new node for the tree's root. Copy constructors will recursively populate nodes.
         // phasing out old copyNode function as it didn't work...
+        if (treeToCopy.rootNode == null) {
+            System.out.println("DEBUG: attempting to copy root node; it is null");
+        }
+
+        if (treeToCopy.rootNode.msg == null || treeToCopy.rootNode.msg == "") {
+            System.out.println("DEBUG: Attempting to copy empty message");
+        }
         newTree.rootNode = new NPCStatement(treeToCopy.rootNode, null);
+        newTree.currentNode = newTree.rootNode;
+        System.out.println("DEBUG: In the copy tree function");
         return newTree;
 
     }
@@ -426,9 +450,9 @@ public class DialogueTree {
         String nodeString = "";
 
         if (currentNode.msg == null || currentNode.msg == "") {
-            nodeString = "NPC: ";
+            nodeString = "NPC: <empty>";
         } else {
-            nodeString = "NPC: " + currentNode.msg;
+            nodeString = "NPC: <not empty>" + currentNode.msg;
         }
 
         // print all player responses - add * if pmsg has an npc msg tied to it

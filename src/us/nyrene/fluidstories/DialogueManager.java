@@ -239,7 +239,12 @@ public class DialogueManager {
         String DUniqueName = playerID + "_" + copiedDTree.name;
         closedDialogues.put(DUniqueName, copiedDTree);
 
-        return "Saved and closed dialogue" + copiedDTree.name + ".";
+        if (copiedDTree == null) {
+            System.out.println("DEBUG: Error: tried to copy tree, result was null");
+        }
+
+        editingDialogues.put(playerID, null);
+        return "Saved and closed dialogue " + copiedDTree.name + ".";
     }
 
     // TD: rename to playerSelectedPMsg

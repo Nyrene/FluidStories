@@ -146,7 +146,8 @@ public class CmdFS implements CommandExecutor {
                     break;
 
                 case "saveandclose":
-                    main.getInstance().getDialogueManager().saveAndCloseActiveDialogueForPlayer(writer.getUniqueId());
+                    returnString = main.getInstance().getDialogueManager().saveAndCloseActiveDialogueForPlayer(writer.getUniqueId());
+                    writer.sendMessage(returnString);
                     break;
 
                 case "close":
