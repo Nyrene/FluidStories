@@ -140,7 +140,6 @@ public class DialogueTree {
                 // ownership of their tree
     ArrayList<UUID> sharedWriters;
     UUID playerOwner; // owns the file/tree - used for filename
-    boolean beingEdited = false;
 
 
     NPCStatement currentNode; // this is for editing. probably need to change to editingNode or something similar
@@ -152,27 +151,8 @@ public class DialogueTree {
         playerOwner = playerID;
         rootNode = new NPCStatement();
         currentNode = rootNode;
-
-        beingEdited = true;
     }
 
-    // TD: delete this function, not using static hashmap anymore
-    public static void addDialogueToExisting(DialogueTree newTree) {
-        // check attributes exit
-        if (newTree.name != null && newTree.playerOwner != null && newTree.rootNode != null) {
-            // TD: check alphabetic tree name
-            String fName = newTree.playerOwner + "_" + newTree.name;
-            // this function doesn't check for duplicates
-            DialogueTree.dialogues.put(fName, newTree);
-            System.out.println("Added tree with treename: " + fName);
-
-        } else {
-            // TD: print error: can't add w/ null attributes
-            System.out.println("Error: couldn't add new dialogue w null attributes");
-            return;
-        }
-
-    }
 
     // this does the same thing as getDialogueForPlayer, but takes the full filename "playername_treename"
     public static DialogueTree getDialogueForFName(String givenFName) {
@@ -381,12 +361,6 @@ public class DialogueTree {
 
         String returnStr;
         selection --; // use as index now
-        System.out.println("DEBUG: number of pstatements is: " + fetchedNode.numPStatements);
-        if (fetchedNode.pStatements[0] == null) {
-            System.out.println("first pmsg is null");
-        } else {
-            System.out.println("first pmsg is NOT null");
-        }
 
         // two primary cases: either there's an NPC node for that option, or there isn't one.
         // if there isn't, the conversation ends, and the player sees an empty string.
@@ -447,7 +421,6 @@ public class DialogueTree {
         if (curPlayerNode == null) {
             return "\n You are not currently in a conversation with anyone.";
         }
-
 
         String nodeString;
 
