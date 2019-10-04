@@ -214,7 +214,8 @@ public class DialogueManager {
 
             // new plan:
             // there will be only once instance of each speaking dialogue.
-            // these dialogues have bookmarks for each player.
+            // these dialogues have bookmarks for each player, holding their place in the tree.
+            // TD: if the player has a convo with another NPC, end it
 
             speakingDialogues.put(playerID, fetchedDialogue);
             return fetchedDialogue.playerStartedConversation(playerID);

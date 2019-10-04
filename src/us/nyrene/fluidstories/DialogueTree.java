@@ -191,12 +191,10 @@ public class DialogueTree {
     }
 
     public static DialogueTree copyTree(DialogueTree treeToCopy) {
-        // on second thought, copying the tree for each player may be costly. Since
-        // only one dialogue exists, shared by ID to all NPCs, may isntead
         DialogueTree newTree = new DialogueTree(treeToCopy.name, treeToCopy.playerOwner);
 
-        // create new node for the tree's root. Copy constructors will recursively populate nodes.
-        // phasing out old copyNode function as it didn't work...
+        // Need to re-implement the copy node function for consistency w/ copy pmsg function.
+        // or just leave it for now... will need to be revisited if those class definitions change.
         if (treeToCopy.rootNode == null) {
             System.out.println("DEBUG: attempting to copy root node; it is null");
         }
@@ -211,7 +209,9 @@ public class DialogueTree {
 
     }
 
-    // TBDeleted once recursive copy constructors have been tested
+    // Might end up re-incorporating this, as a copy pmsg function had to be created because
+    // the new pmsg object had to be assigned before the copy was over (hence, couldn't just use
+    // copy constructor.
     /*
     public static NPCStatement copyNode(NPCStatement nodeToCopy) {
         NPCStatement newNode = new NPCStatement();
@@ -405,7 +405,7 @@ public class DialogueTree {
             } else {
                 // .... otherwise, set the player's current node to the selection, and return options for that.
                 playerBookmarks.put(playerID, nextNode);
-                returnStr = "You: " + fetchedNode.pStatements[selection];
+                returnStr = "You: " + fetchedNode.pStatements[selection].msg;
                 returnStr += "\n" + getNodeTalkingTextForPlayer(playerID);
 
             }
@@ -443,22 +443,24 @@ public class DialogueTree {
         // return an empty string.
         // also, no signifier for if an option has an NPC node attached to it.
 
-        if (currentNode == null) {
-            throw new NullPointerException("Error: tree's current node is null");
+        NPCStatement curPlayerNode = playerBookmarks.get(thisPlayerID);
+        if (curPlayerNode == null) {
+            return "\n You are not currently in a conversation with anyone.";
         }
 
-        String nodeString = "";
 
-        if (currentNode.msg == null || currentNode.msg == "") {
-            nodeString = "NPC: <empty>";
+        String nodeString;
+
+        if (curPlayerNode.msg == null || curPlayerNode.msg == "") {
+            nodeString = "NPC: ";
         } else {
-            nodeString = "NPC: <not empty>" + currentNode.msg;
+            nodeString = "NPC: " + curPlayerNode.msg;
         }
 
         // print all player responses - add * if pmsg has an npc msg tied to it
-        if (currentNode.pStatements.length > 0) {
-            for (int i = 0; i < currentNode.numPStatements; i++) {
-                nodeString += ((i + 1) + ". " + currentNode.pStatements[i].msg);
+        if (curPlayerNode.pStatements.length > 0) {
+            for (int i = 0; i < curPlayerNode.numPStatements; i++) {
+                nodeString += "\n" + ((i + 1) + ". " + curPlayerNode.pStatements[i].msg);
             }
         }
 
