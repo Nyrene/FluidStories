@@ -78,7 +78,8 @@ public class NPCManager {
         while (iterator.hasNext()) {
             Villager thisVillager = ((Villager) iterator.next());
             if (thisVillager.getUniqueId() == fetchedNPC.entityID) {
-                thisVillager.remove(); // TD see if this actually immediately removes the villager?
+                thisVillager.remove();
+                activeNPCs.remove(npcName);
             }
 
         }
