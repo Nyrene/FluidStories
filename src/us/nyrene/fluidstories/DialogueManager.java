@@ -126,7 +126,7 @@ public class DialogueManager {
         DialogueTree newDialogue = new DialogueTree(newName, playerID);
         editingDialogues.put(playerID, newDialogue);
 
-        return "New tree " + newName + " created!";
+        return "New tree '" + newName + "' created!";
     }
 
 
@@ -173,6 +173,17 @@ public class DialogueManager {
         fetchedDialogue.addPMsgToCurrent(pMsg);
 
         return "";
+    }
+
+    public String delPMsgInActiveDialogue(int givenPNum, UUID playerID) {
+
+        DialogueTree fetchedDialogue = getEditingDialogueForPlayer(playerID);
+        if (fetchedDialogue == null) {
+            return "No active dialogue!";
+        }
+
+
+        return fetchedDialogue.delPStatement(givenPNum);
     }
 
     public String selectForActiveDialogue(int selection, UUID playerID) {

@@ -141,6 +141,18 @@ public class CmdFS implements CommandExecutor {
                     activePDialogue.printCurrentNode(writer);
                     break;
 
+                case "delpmsg":
+                    if (args.length != 2) {
+                        writer.sendMessage("usage: /fs delpmsg <#>");
+                    }
+
+                    int delPNum = Integer.valueOf(args[1]);
+                    errString = main.getInstance().getDialogueManager().delPMsgInActiveDialogue(delPNum, writer.getUniqueId());
+                    if (errString != "") {
+                        writer.sendMessage(errString);
+                    }
+                    activePDialogue.printCurrentNode(writer);
+
                 case "open":
                     // give the name, player ID to dialogue manager for it to open
                     break;

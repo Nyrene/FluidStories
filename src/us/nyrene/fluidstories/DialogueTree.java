@@ -271,18 +271,51 @@ public class DialogueTree {
 
     }
 
-    public String delPStatement(int givenPIndex) {
-        if (currentNode.numPStatements == 0) return "No player statements to delete!";
-        if (currentNode.pStatements[givenPIndex] == null) return "Invalid selection.";
+    public String delPStatement(int givenPNum) {
+        if (currentNode.numPStatements == 0) {
+            return "No player statements to delete.";
+        }
 
-        //see below pseudocode
-        //if (givenPNum)
-        currentNode.pStatements[givenPIndex] = null;
-        currentNode.numPStatements -= 1;
+        if (currentNode.numPStatements < givenPNum) {
+            return "Invalid selection.";
+        }
+
+        if (givenPNum == 1 && currentNode.numPStatements == 1) {
+
+            currentNode.numPStatements--;
+            currentNode.pStatements[0] = null;
+        } else {
+            int shiftNum = givenPNum;
+            while (shiftNum <= currentNode.numPStatements) {
+                currentNode.pStatements[shiftNum - 1] = currentNode.pStatements[shiftNum];
+                currentNode.numPStatements--;
+                shiftNum++;
+            }
+        }
+
         return "";
     }
 
     public String delNPCStatement(int givenPNum) {
+        if (currentNode.numPStatements == 0) {
+            return "No player statements to delete.";
+        }
+
+        if (currentNode.numPStatements < givenPNum) {
+            return "Invalid selection.";
+        }
+
+        if (givenPNum == 1 && currentNode.numPStatements == 1) {
+
+            currentNode.numPStatements --;
+            currentNode.pStatements[0] = null;
+        } else {
+            int shiftNum = givenPNum;
+            while (shiftNum <= currentNode.numPStatements) {
+                currentNode.pStatements[shiftNum - 1] = currentNode.pStatements[shiftNum];
+                shiftNum++;
+            }
+        }
 
         return "";
     }
@@ -301,19 +334,6 @@ public class DialogueTree {
 
      */
 
-
-    /*
-    if (givenInt == 1 and currentNode.numPlayerStatements == 1) then
-		currentNode.playerStatements = {}
-	else
-		local shiftNum = givenInt + 1
-		--local shiftEnd = numPlayerStatements
-		while (shiftNum <= currentNode.numPlayerStatements) do
-			currentNode.playerStatements[shiftNum - 1].msg = currentNode.playerStatements[shiftNum].msg
-			shiftNum = shiftNum + 1
-		end
-	end
-     */
 
 
     // utility/navigation, also for editing use
