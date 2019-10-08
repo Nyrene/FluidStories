@@ -76,12 +76,11 @@ public class NPCManager {
 
         // while loop
         while (iterator.hasNext()) {
-            Villager thisVillager = ((Villager) iterator.next());
-            if (thisVillager.getUniqueId() == fetchedNPC.entityID) {
-                thisVillager.remove();
+            Entity thisEntity = iterator.next();
+            if (thisEntity.getUniqueId() == fetchedNPC.entityID) {
+                thisEntity.remove();
                 activeNPCs.remove(npcName);
             }
-
         }
 
         return "";
