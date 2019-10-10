@@ -36,7 +36,7 @@ public class NPCData {
     String name;
     String description;
     UUID entityID;
-    Location location;
+    transient Location location;
     // DialogueTree dialogue;
     String dialogueTreeID = "";
     UUID playerOwner;

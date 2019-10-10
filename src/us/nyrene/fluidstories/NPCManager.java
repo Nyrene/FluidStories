@@ -176,16 +176,22 @@ public class NPCManager {
     public void writeNPCData() {
         Gson gsonObj = new GsonBuilder().setPrettyPrinting().create();
         Iterator it = activeNPCs.entrySet().iterator();
+        String jsonResult;
         // below copied from: https://stackoverflow.com/questions/1066589/iterate-through-a-hashmap
         while (it.hasNext()) {
             HashMap.Entry pair = (HashMap.Entry)it.next();
             NPCData thisData = (NPCData) pair.getValue();
-            String jsonResult = gsonObj.toJson(thisData);
-            try { fwriter.write(jsonResult); }
+            jsonResult = gsonObj.toJson(thisData);
+            try { fwriter.write(jsonResult + "\n"); }
             catch (IOException e) {
                 System.out.println("Error: could not write npcdata to file, " + e);
             }
             System.out.println("Successfully saved NPC data.");
+        }
+
+        try {fwriter.close(); }
+        catch (IOException e) {
+            System.out.println("Error: " + e);
         }
 
     }
