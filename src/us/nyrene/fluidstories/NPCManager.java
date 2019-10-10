@@ -1,5 +1,11 @@
 package us.nyrene.fluidstories;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.Command;
@@ -19,10 +25,15 @@ public class NPCManager {
     // NPCs are ID'd by name, which is why they must
     // all be kept unique. Change later on?
     private HashMap<String, NPCData> activeNPCs;
+    private FileWriter fwriter;
 
 
     public NPCManager() {
         activeNPCs = new HashMap<String, NPCData>();
+        try {fwriter = new FileWriter("npcs");}
+        catch (IOException e) {
+            System.out.println("Error opening npcs file: " + e);
+        }
     }
 
     public void spawnNPC(String newNPCName, Location targetLocation, UUID playerOwnerUUID) {
@@ -160,5 +171,25 @@ public class NPCManager {
         NPCData fetchedNPC = activeNPCs.get(npcName);
         return fetchedNPC.getDialogueTreeID();
     }
+
+    // test code within branch 'persistence'
+    public void writeNPCData() {
+        Gson gsonObj = new GsonBuilder().setPrettyPrinting().create();
+        Iterator it = activeNPCs.entrySet().iterator();
+        // below copied from: https://stackoverflow.com/questions/1066589/iterate-through-a-hashmap
+        while (it.hasNext()) {
+            HashMap.Entry pair = (HashMap.Entry)it.next();
+            NPCData thisData = (NPCData) pair.getValue();
+            String jsonResult = gsonObj.toJson(thisData);
+            try { fwriter.write(jsonResult); }
+            catch (IOException e) {
+                System.out.println("Error: could not write npcdata to file, " + e);
+            }
+            System.out.println("Successfully saved NPC data.");
+        }
+
+    }
+
+
 
 }
