@@ -34,7 +34,9 @@ public class main extends JavaPlugin {
 
     @Override
     public void onLoad() {
+
         instance = this;
+        npcMgr.loadNPCData();
     }
 
     public static main getInstance() {

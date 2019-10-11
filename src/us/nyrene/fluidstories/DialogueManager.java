@@ -273,4 +273,11 @@ public class DialogueManager {
 
     }
 
+
+    public void saveClosedDialogues() {
+        // create gson object
+
+        // attempt to
+    }
+
 }

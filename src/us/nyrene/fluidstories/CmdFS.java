@@ -170,7 +170,14 @@ public class CmdFS implements CommandExecutor {
                     writer.sendMessage("<list of available commands");
                     break;
 
+                    // remove once no longer working in persistence branch
+                case "debugsavenpcs":
+                    main.getInstance().getNPCMgr().writeNPCData();
+                    break;
 
+                case "debugloadnpcs":
+                    main.getInstance().getNPCMgr().loadNPCData();
+                    break;
                 default:
                     writer.sendMessage("FS: Unrecognized subcommand.");
                     break;

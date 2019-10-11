@@ -2,6 +2,8 @@ package us.nyrene.fluidstories;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 import com.google.gson.Gson;
@@ -25,15 +27,11 @@ public class NPCManager {
     // NPCs are ID'd by name, which is why they must
     // all be kept unique. Change later on?
     private HashMap<String, NPCData> activeNPCs;
-    private FileWriter fwriter;
 
 
     public NPCManager() {
         activeNPCs = new HashMap<String, NPCData>();
-        try {fwriter = new FileWriter("npcs");}
-        catch (IOException e) {
-            System.out.println("Error opening npcs file: " + e);
-        }
+
     }
 
     public void spawnNPC(String newNPCName, Location targetLocation, UUID playerOwnerUUID) {
@@ -174,26 +172,81 @@ public class NPCManager {
 
     // test code within branch 'persistence'
     public void writeNPCData() {
+
+        FileWriter fwriter;
+        try {fwriter = new FileWriter("npcs");}
+        catch (IOException e) {
+            System.out.println("Error opening npcs file: " + e);
+            return;
+        }
+
+        // if activeNPCs is empty(no one's created any, or all have been deleted, wipe the npcs file.
+        // if we don't do this then the file never gets updated at all, and NPCs might be left
+        // erroneously.
+
         Gson gsonObj = new GsonBuilder().setPrettyPrinting().create();
         Iterator it = activeNPCs.entrySet().iterator();
         String jsonResult;
         // below copied from: https://stackoverflow.com/questions/1066589/iterate-through-a-hashmap
-        while (it.hasNext()) {
+        // modifying to add all these map items to a list, and saving the array as JSON
+        NPCData[] npcList = new NPCData [activeNPCs.size()];
+        int i = 0;
+
+        while (it.hasNext() && i < npcList.length) {
             HashMap.Entry pair = (HashMap.Entry)it.next();
             NPCData thisData = (NPCData) pair.getValue();
-            jsonResult = gsonObj.toJson(thisData);
-            try { fwriter.write(jsonResult + "\n"); }
-            catch (IOException e) {
-                System.out.println("Error: could not write npcdata to file, " + e);
-            }
-            System.out.println("Successfully saved NPC data.");
+            npcList[i] = thisData;
+            i++;
         }
+
+        jsonResult = gsonObj.toJson(npcList);
+        try { fwriter.write(jsonResult + "\n"); }
+        catch (IOException e) {
+            System.out.println("Error: could not write npcdata to file, " + e);
+        }
+        System.out.println("Finished saving NPC data.");
 
         try {fwriter.close(); }
         catch (IOException e) {
             System.out.println("Error: " + e);
         }
 
+    }
+
+    public void loadNPCData() {
+        // create gson object
+        Gson gsonObj = new Gson();
+
+        //  create object to hold array
+        NPCData[] parsedData;
+
+
+        // get json string from file
+        String jsonStr;
+        try {jsonStr = new String(Files.readAllBytes(Paths.get("npcs"))); }
+        catch (IOException e) {
+            System.out.println("Error: could not read file to load from NPCs. " + e);
+            return;
+        }
+
+        try {parsedData = gsonObj.fromJson(jsonStr, NPCData[].class);}
+        catch (Exception e) {
+            System.out.println("Error: could not parse npc data");
+            return;
+        }
+
+        if (parsedData == null) {
+            System.out.println("Did not load any NPCs from JSON file.");
+            return;
+        }
+
+        for (int i = 0; i < parsedData.length; i++) {
+            System.out.println("DEBUG: loading NPC: " + parsedData[i].name);
+            activeNPCs.put(parsedData[i].name, parsedData[i]);
+        }
+
+
+        // if there's a problem with an entry, skip it and go to the next one
     }
 
 
