@@ -3,7 +3,11 @@ import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.Hash;
 
 import java.util.UUID;
 import java.util.HashMap;
-import java.util.List;
+import com.google.gson.Gson;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 class WriterStats {
     UUID playerID;
@@ -242,7 +246,7 @@ public class DialogueManager {
     }
 
     public String saveAndCloseActiveDialogueForPlayer(UUID playerID) {
-        // copy the active dialogue to editing dialogues, adn remove it from editing hashmap
+        // copy the active dialogue to editing dialogues, and remove it from editing hashmap
         if (editingDialogues.get(playerID) == null) {
             return "No active dialogue to close";
         }
@@ -256,6 +260,7 @@ public class DialogueManager {
         }
 
         editingDialogues.put(playerID, null);
+        System.out.println("Unique name for tree being saved is: " + DUniqueName);
         return "Saved and closed dialogue " + copiedDTree.name + ".";
     }
 
@@ -276,8 +281,44 @@ public class DialogueManager {
 
     public void saveClosedDialogues() {
         // create gson object
+        Gson gson = new Gson();
 
-        // attempt to
+        // first just try saving dialogue called 'test' if it exists.
+        DialogueTree testTree = closedDialogues.get("4dd7405c-a909-48a8-a2a5-7126dd845f74_test");
+        if (testTree == null) {
+            System.out.println("Error: test tree is null.");
+            return;
+        }
+
+        // attempt to open the file to write
+        FileWriter fwriter;
+        try {fwriter = new FileWriter("testSavedDialogue");}
+        catch (IOException e) {
+            System.out.println("Error: Could not open dialogue file to write" + e);
+            return;
+        }
+
+        // try converting to json
+        String jsonResult;
+        try {
+            jsonResult = gson.toJson(testTree);
+            System.out.println("Attempted to convert tree to JSON: \n" + jsonResult);
+        } catch (Exception e) {
+            System.out.println("Error: could not convert dialogue tree to json. " + e);
+            return;
+        }
+
+        try {fwriter.write(jsonResult);
+            fwriter.close();}
+        catch (IOException e) {
+            System.out.println("Error: could not write json dialogue to file. " + e);
+            return;
+        }
+
+    }
+
+    public void loadDialogues() {
+
     }
 
 }

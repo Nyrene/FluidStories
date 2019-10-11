@@ -39,7 +39,7 @@ class DError {
 
 class PlayerStatement {
     String msg;
-    NPCStatement npcPrevious;
+    transient NPCStatement npcPrevious;
     NPCStatement npcNode;
 
     public PlayerStatement(String givenMsg, NPCStatement givenPrevNode) {
@@ -82,7 +82,7 @@ class NPCStatement {
     String msg;
     PlayerStatement[] pStatements; // set size later, using MAXPLAYERSTATEMENTS
     int numPStatements = 0;
-    PlayerStatement playerPrevious;
+    transient PlayerStatement playerPrevious;
 
     public NPCStatement() {
         msg = "";

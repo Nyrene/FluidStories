@@ -7,11 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b1c2219-6eb9-4a37-b858-8162ceff7229" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/src/us/nyrene/fluidstories/CmdFS.java" afterPath="$PROJECT_DIR$/src/us/nyrene/fluidstories/CmdFS.java" />
       <change beforePath="$PROJECT_DIR$/src/us/nyrene/fluidstories/DialogueManager.java" afterPath="$PROJECT_DIR$/src/us/nyrene/fluidstories/DialogueManager.java" />
-      <change beforePath="$PROJECT_DIR$/src/us/nyrene/fluidstories/NPCManager.java" afterPath="$PROJECT_DIR$/src/us/nyrene/fluidstories/NPCManager.java" />
-      <change beforePath="$PROJECT_DIR$/src/us/nyrene/fluidstories/main.java" afterPath="$PROJECT_DIR$/src/us/nyrene/fluidstories/main.java" />
+      <change beforePath="$PROJECT_DIR$/src/us/nyrene/fluidstories/DialogueTree.java" afterPath="$PROJECT_DIR$/src/us/nyrene/fluidstories/DialogueTree.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -26,16 +24,16 @@
       <file leaf-file-name="DialogueTree.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/us/nyrene/fluidstories/DialogueTree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6690">
-              <caret line="456" column="13" lean-forward="false" selection-start-line="456" selection-start-column="13" selection-end-line="456" selection-end-column="13" />
+            <state relative-caret-position="475">
+              <caret line="459" column="26" lean-forward="true" selection-start-line="459" selection-start-column="26" selection-end-line="459" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#533#534#0" expanded="true" />
                 <element signature="e#563#564#0" expanded="true" />
                 <element signature="e#605#606#0" expanded="true" />
                 <element signature="e#637#638#0" expanded="true" />
-                <element signature="e#3368#3369#0" expanded="true" />
-                <element signature="e#3396#3397#0" expanded="true" />
+                <element signature="e#3388#3389#0" expanded="true" />
+                <element signature="e#3416#3417#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -54,8 +52,8 @@
       <file leaf-file-name="main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/us/nyrene/fluidstories/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="570">
-              <caret line="38" column="24" lean-forward="false" selection-start-line="38" selection-start-column="24" selection-end-line="38" selection-end-column="24" />
+            <state relative-caret-position="351">
+              <caret line="29" column="13" lean-forward="false" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
               <folding>
                 <element signature="e#1105#1106#0" expanded="true" />
                 <element signature="e#1142#1143#0" expanded="true" />
@@ -79,8 +77,8 @@
       <file leaf-file-name="DialogueManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/us/nyrene/fluidstories/DialogueManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4125">
-              <caret line="279" column="21" lean-forward="false" selection-start-line="279" selection-start-column="21" selection-end-line="279" selection-end-column="21" />
+            <state relative-caret-position="458">
+              <caret line="271" column="33" lean-forward="true" selection-start-line="271" selection-start-column="33" selection-end-line="271" selection-end-column="33" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -103,11 +101,9 @@
       <file leaf-file-name="NPCManager.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/us/nyrene/fluidstories/NPCManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="552">
-              <caret line="233" column="66" lean-forward="false" selection-start-line="233" selection-start-column="66" selection-end-line="233" selection-end-column="66" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="-1092">
+              <caret line="14" column="30" lean-forward="true" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -135,8 +131,8 @@
       <file leaf-file-name="CmdFS.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/us/nyrene/fluidstories/CmdFS.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="451">
-              <caret line="179" column="26" lean-forward="false" selection-start-line="179" selection-start-column="26" selection-end-line="179" selection-end-column="26" />
+            <state relative-caret-position="470">
+              <caret line="182" column="65" lean-forward="false" selection-start-line="182" selection-start-column="65" selection-end-line="182" selection-end-column="65" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -155,7 +151,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>playerstart</find>
       <find>copynode</find>
       <find>copyn</find>
       <find>copy c</find>
@@ -170,7 +165,6 @@
       <find>copyplayer</find>
       <find>saved and closed dia</find>
       <find>&lt;empty&gt;</find>
-      <find>saveandclose</find>
       <find>playerstartedconv</find>
       <find>= copy</find>
       <find>dialoguetree</find>
@@ -185,6 +179,8 @@
       <find>beingEdited</find>
       <find>new tree</find>
       <find>delpmsg</find>
+      <find>loadnpc</find>
+      <find>saveandclose</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -209,11 +205,11 @@
         <option value="$PROJECT_DIR$/src/plugin.yml" />
         <option value="$PROJECT_DIR$/src/us/nyrene/fluidstories/CmdSay.java" />
         <option value="$PROJECT_DIR$/src/us/nyrene/fluidstories/NPCData.java" />
+        <option value="$PROJECT_DIR$/src/us/nyrene/fluidstories/main.java" />
+        <option value="$PROJECT_DIR$/src/us/nyrene/fluidstories/NPCManager.java" />
+        <option value="$PROJECT_DIR$/src/us/nyrene/fluidstories/CmdFS.java" />
         <option value="$PROJECT_DIR$/src/us/nyrene/fluidstories/DialogueTree.java" />
         <option value="$PROJECT_DIR$/src/us/nyrene/fluidstories/DialogueManager.java" />
-        <option value="$PROJECT_DIR$/src/us/nyrene/fluidstories/main.java" />
-        <option value="$PROJECT_DIR$/src/us/nyrene/fluidstories/CmdFS.java" />
-        <option value="$PROJECT_DIR$/src/us/nyrene/fluidstories/NPCManager.java" />
       </list>
     </option>
   </component>
@@ -284,6 +280,20 @@
               <item name="FluidStories" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="fluidstories" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FluidStories" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FluidStories" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="fluidstories" type="462c0819:PsiDirectoryNode" />
+              <item name="DialogueManager.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
+            </path>
+            <path>
+              <item name="FluidStories" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FluidStories" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="fluidstories" type="462c0819:PsiDirectoryNode" />
+              <item name="DialogueTree.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
             </path>
             <path>
               <item name="FluidStories" type="b2602c69:ProjectViewProjectNode" />
@@ -548,8 +558,8 @@
             <element signature="e#563#564#0" expanded="true" />
             <element signature="e#605#606#0" expanded="true" />
             <element signature="e#637#638#0" expanded="true" />
-            <element signature="e#3368#3369#0" expanded="true" />
-            <element signature="e#3396#3397#0" expanded="true" />
+            <element signature="e#3388#3389#0" expanded="true" />
+            <element signature="e#3416#3417#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -668,8 +678,8 @@
             <element signature="e#563#564#0" expanded="true" />
             <element signature="e#605#606#0" expanded="true" />
             <element signature="e#637#638#0" expanded="true" />
-            <element signature="e#3368#3369#0" expanded="true" />
-            <element signature="e#3396#3397#0" expanded="true" />
+            <element signature="e#3388#3389#0" expanded="true" />
+            <element signature="e#3416#3417#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -832,37 +842,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/us/nyrene/fluidstories/DialogueManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4125">
-          <caret line="279" column="21" lean-forward="false" selection-start-line="279" selection-start-column="21" selection-end-line="279" selection-end-column="21" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/us/nyrene/fluidstories/CmdSetNPCDesc.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="19" column="57" lean-forward="false" selection-start-line="19" selection-start-column="57" selection-end-line="19" selection-end-column="57" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/us/nyrene/fluidstories/DialogueTree.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6690">
-          <caret line="456" column="13" lean-forward="false" selection-start-line="456" selection-start-column="13" selection-end-line="456" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#533#534#0" expanded="true" />
-            <element signature="e#563#564#0" expanded="true" />
-            <element signature="e#605#606#0" expanded="true" />
-            <element signature="e#637#638#0" expanded="true" />
-            <element signature="e#3368#3369#0" expanded="true" />
-            <element signature="e#3396#3397#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -876,20 +860,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/us/nyrene/fluidstories/CmdFS.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="451">
-          <caret line="179" column="26" lean-forward="false" selection-start-line="179" selection-start-column="26" selection-end-line="179" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/us/nyrene/fluidstories/main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="38" column="24" lean-forward="false" selection-start-line="38" selection-start-column="24" selection-end-line="38" selection-end-column="24" />
+        <state relative-caret-position="351">
+          <caret line="29" column="13" lean-forward="false" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
           <folding>
             <element signature="e#1105#1106#0" expanded="true" />
             <element signature="e#1142#1143#0" expanded="true" />
@@ -907,13 +881,47 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/us/nyrene/fluidstories/NPCManager.java">
+    <entry file="file://$PROJECT_DIR$/src/us/nyrene/fluidstories/CmdFS.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="233" column="66" lean-forward="false" selection-start-line="233" selection-start-column="66" selection-end-line="233" selection-end-column="66" />
+        <state relative-caret-position="470">
+          <caret line="182" column="65" lean-forward="false" selection-start-line="182" selection-start-column="65" selection-end-line="182" selection-end-column="65" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/us/nyrene/fluidstories/DialogueTree.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="459" column="26" lean-forward="true" selection-start-line="459" selection-start-column="26" selection-end-line="459" selection-end-column="26" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#533#534#0" expanded="true" />
+            <element signature="e#563#564#0" expanded="true" />
+            <element signature="e#605#606#0" expanded="true" />
+            <element signature="e#637#638#0" expanded="true" />
+            <element signature="e#3388#3389#0" expanded="true" />
+            <element signature="e#3416#3417#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/us/nyrene/fluidstories/DialogueManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="458">
+          <caret line="271" column="33" lean-forward="true" selection-start-line="271" selection-start-column="33" selection-end-line="271" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/us/nyrene/fluidstories/NPCManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1092">
+          <caret line="14" column="30" lean-forward="true" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
+          <folding />
         </state>
       </provider>
     </entry>
