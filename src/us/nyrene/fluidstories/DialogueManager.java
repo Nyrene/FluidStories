@@ -1,12 +1,15 @@
 package us.nyrene.fluidstories;
+import com.google.gson.GsonBuilder;
 import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.Hash;
 
+import java.util.Iterator;
 import java.util.UUID;
 import java.util.HashMap;
 import com.google.gson.Gson;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.io.File;
 import java.nio.file.Paths;
 
 class WriterStats {
@@ -280,45 +283,145 @@ public class DialogueManager {
 
 
     public void saveClosedDialogues() {
+        // see if the dialogues folder exists. If not, try to create it
+
+        File folder = new File("Dialogues");
+        if (!(folder.exists() && folder.isDirectory())) {
+            // try to create Folder, then proceed
+            if (folder.mkdir()) {
+                System.out.println("Dialogues folder does not exist, created");
+            } else
+            {
+                System.out.println("Could not create Dialogues folder. Unable to save dialogues");
+                return;
+            }
+        }
+
         // create gson object
-        Gson gson = new Gson();
-
-        // first just try saving dialogue called 'test' if it exists.
-        DialogueTree testTree = closedDialogues.get("4dd7405c-a909-48a8-a2a5-7126dd845f74_test");
-        if (testTree == null) {
-            System.out.println("Error: test tree is null.");
-            return;
-        }
-
-        // attempt to open the file to write
-        FileWriter fwriter;
-        try {fwriter = new FileWriter("testSavedDialogue");}
-        catch (IOException e) {
-            System.out.println("Error: Could not open dialogue file to write" + e);
-            return;
-        }
-
-        // try converting to json
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String jsonResult;
-        try {
-            jsonResult = gson.toJson(testTree);
-            System.out.println("Attempted to convert tree to JSON: \n" + jsonResult);
-        } catch (Exception e) {
-            System.out.println("Error: could not convert dialogue tree to json. " + e);
-            return;
+        // new code: save all dialogues
+        Iterator it = closedDialogues.entrySet().iterator();
+        // below copied from: https://stackoverflow.com/questions/1066589/iterate-through-a-hashmap
+        // modifying to add all these map items to a list, and saving the array as JSON
+        DialogueTree[] treeList = new DialogueTree [closedDialogues.size()];
+        int i = 0;
+
+        while (it.hasNext() && i < treeList.length) {
+            HashMap.Entry pair = (HashMap.Entry) it.next();
+            DialogueTree thisDialogue = (DialogueTree) pair.getValue();
+
+
+            FileWriter fwriter;
+            try {fwriter = new FileWriter("Dialogues/" + (pair.getKey() + "_" + ((DialogueTree) pair.getValue()).name));}
+            catch (IOException e) {
+                System.out.println("Error: Could not open dialogue file to write" + e);
+                return;
+            }
+
+            jsonResult = "";
+            try {
+                jsonResult = gson.toJson(thisDialogue);
+                System.out.println("Attempted to convert tree to JSON: \n" + jsonResult);
+            } catch (Exception e) {
+                System.out.println("Error: could not convert dialogue tree to json. " + e);
+                return;
+            }
+
+            try {fwriter.write(jsonResult);
+                fwriter.close();}
+            catch (IOException e) {
+                System.out.println("Error: could not write json dialogue to file. " + e);
+                return;
+            }
+
+            i++;
+        }
         }
 
-        try {fwriter.write(jsonResult);
-            fwriter.close();}
-        catch (IOException e) {
-            System.out.println("Error: could not write json dialogue to file. " + e);
-            return;
-        }
 
-    }
 
+    // TD: refactor
     public void loadDialogues() {
+        Gson gsonObj = new Gson();
 
+        // get all files
+        File folder = new File("/");
+        if (folder == null) {
+            System.out.println("FluidStories: Error: could not open Dialogues folder.");
+        }
+        File[] files = folder.listFiles();
+
+        if (files == null || files.length == 0) {
+            return;
+        }
+
+        for (File file : files)
+        {
+            // check that the filename format is correct
+            String fileName = file.getName();
+            DialogueTree parsedData;
+            if (fileName.contains("_")) {
+                String[] sections = fileName.split("_"); // hold onto this for now
+                if (sections.length > 2) {
+                    // invalid format, skip processing this file
+                    continue;
+                }
+                // load file contents, parse with gson
+                String jsonStr;
+                try {jsonStr = new String(Files.readAllBytes(Paths.get(fileName))); }
+                catch (IOException e) {
+                    System.out.println("Error: could not read dialogue file. " + e);
+                    return;
+                }
+
+                try {parsedData = gsonObj.fromJson(jsonStr, DialogueTree.class);}
+                catch (Exception e) {
+                    System.out.println("Error: could not parse dialogue data");
+                    return;
+                }
+
+                // add newly parsed dialogue to active npc dialogues
+                closedDialogues.put(fileName, parsedData);
+
+            }
+
+        }
+
+
+/*
+        // --------------below is copied from NPC data. delete after completing
+        //  create object to hold array
+        NPCData[] parsedData;
+
+
+        // get json string from file
+        String jsonStr;
+        try {jsonStr = new String(Files.readAllBytes(Paths.get("npcs"))); }
+        catch (IOException e) {
+            System.out.println("Error: could not read file to load dialogue. " + e);
+            return;
+        }
+
+        try {parsedData = gsonObj.fromJson(jsonStr, NPCData[].class);}
+        catch (Exception e) {
+            System.out.println("Error: could not parse npc data");
+            return;
+        }
+
+        if (parsedData == null) {
+            System.out.println("Did not load any NPCs from JSON file.");
+            return;
+        }
+
+        for (int i = 0; i < parsedData.length; i++) {
+            System.out.println("DEBUG: loading NPC: " + parsedData[i].name);
+            activeNPCs.put(parsedData[i].name, parsedData[i]);
+        }
+
+
+        // if there's a problem with an entry, skip it and go to the next one
+*/
     }
 
 }

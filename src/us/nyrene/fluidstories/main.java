@@ -30,13 +30,18 @@ public class main extends JavaPlugin {
     @Override
     public void onDisable(){
         npcMgr.writeNPCData();
+        dialogueManager.saveClosedDialogues();
     }
 
     @Override
     public void onLoad() {
-
         instance = this;
+        // TD:
+        // see if the correct folders exist for the plugin,
+        // create them if not
+
         npcMgr.loadNPCData();
+        dialogueManager.loadDialogues();
     }
 
     public static main getInstance() {

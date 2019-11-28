@@ -122,7 +122,7 @@ public class NPCManager {
             return null;
         }
 
-        if (fetchedNPC.playerOwner != playerID) {
+        if (fetchedNPC.getPlayerOwner() != playerID) {
             error.setMsg("You do not have permissions to modify this NPC.");
         }
 

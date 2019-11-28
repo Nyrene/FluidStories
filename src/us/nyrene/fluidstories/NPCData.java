@@ -8,6 +8,8 @@ import java.util.logging.Logger;
 import java.util.UUID;
 import java.util.Map;
 import org.bukkit.Location;
+import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import java.util.HashMap;
 
 /*
@@ -36,10 +38,17 @@ public class NPCData {
     String name;
     String description;
     UUID entityID;
+    // it's a bunch of extra work to write custom serializationfor the location object,
+    // while leaving default behavior for everything else.
+    // because I am lazy, just keep track of xyz/world for now.
     transient Location location;
+    private Double xCoord;
+    private Double yCoord;
+    private Double zCoord;
+    private String worldName;
     // DialogueTree dialogue;
-    String dialogueTreeID = "";
-    UUID playerOwner;
+    private String dialogueTreeID = "";
+    private UUID playerOwner;
 
     public NPCData(String givenName, UUID givenEntityID, Location givenLocation) {
         entityID = givenEntityID;
@@ -57,6 +66,20 @@ public class NPCData {
         return description;
     }
 
+    public Location getLocation() {
+        // return location constructed from attributes
+
+        return new Location(Bukkit.getWorld(worldName), xCoord, yCoord, zCoord);
+    }
+
+    public void setLocation(Location newLocation) {
+        worldName = newLocation.getWorld().getName();
+        xCoord = newLocation.getX();
+        yCoord = newLocation.getY();
+        zCoord = newLocation.getZ();
+
+    }
+
     public void setNPCDescription(String givenDescription) {
         if (givenDescription == null || givenDescription == "") {
             //log.info("Error: given NPC description was null");
@@ -66,15 +89,16 @@ public class NPCData {
         description = givenDescription;
     }
 
-    public Location getLocation() {
-        return location;
-    }
 
     public void setDialogue(String newDialogueID) {
         if (newDialogueID != null) {
             dialogueTreeID = newDialogueID;
         }
         // TD: error if null
+    }
+
+    public UUID getPlayerOwner() {
+        return playerOwner;
     }
 
     public String getDialogueTreeID() {
