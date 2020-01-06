@@ -21,12 +21,14 @@ public class CmdFS implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender pSender, Command cmd, String strLbl, String[] args) {
         cmdError.reset();
+
         if (pSender instanceof Player) {
             Player writer = (Player) pSender;
 
             if (args.length == 0) {
                 return false;
             }
+
 
             String subcommand = args[0];
             DialogueTree activePDialogue = main.getInstance().getDialogueManager().getEditingDialogueForPlayer(writer.getUniqueId());
@@ -181,6 +183,9 @@ public class CmdFS implements CommandExecutor {
 
                 case "debugsavedialogues":
                     main.getInstance().getDialogueManager().saveClosedDialogues();
+                    break;
+                case "debugloaddialogues":
+                    main.getInstance().getDialogueManager().loadDialogues();
                     break;
                 default:
                     writer.sendMessage("FS: Unrecognized subcommand.");

@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.UUID;
 import java.util.HashMap;
 import com.google.gson.Gson;
+import org.json.simple.parser.JSONParser;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -346,7 +348,7 @@ public class DialogueManager {
         Gson gsonObj = new Gson();
 
         // get all files
-        File folder = new File("/");
+        File folder = new File("Dialogues/");
         if (folder == null) {
             System.out.println("FluidStories: Error: could not open Dialogues folder.");
         }
@@ -363,13 +365,15 @@ public class DialogueManager {
             DialogueTree parsedData;
             if (fileName.contains("_")) {
                 String[] sections = fileName.split("_"); // hold onto this for now
-                if (sections.length > 2) {
+                if (sections.length > 2 || fileName.contains(".")) {
                     // invalid format, skip processing this file
+                    System.out.println("DEBUG: checked file: " + fileName + "does not fit format");
                     continue;
                 }
                 // load file contents, parse with gson
                 String jsonStr;
-                try {jsonStr = new String(Files.readAllBytes(Paths.get(fileName))); }
+                System.out.println("Loading dialogue file: " + fileName);
+                try {jsonStr = new String(Files.readAllBytes(Paths.get("Dialogues/" + fileName))); }
                 catch (IOException e) {
                     System.out.println("Error: could not read dialogue file. " + e);
                     return;
@@ -377,7 +381,7 @@ public class DialogueManager {
 
                 try {parsedData = gsonObj.fromJson(jsonStr, DialogueTree.class);}
                 catch (Exception e) {
-                    System.out.println("Error: could not parse dialogue data");
+                    System.out.println("Error: could not parse dialogue data; " + e);
                     return;
                 }
 
