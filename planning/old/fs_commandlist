@@ -1,0 +1,17 @@
+FS command list
+/spawnnpc <name>
+/delnpc <name>
+/setnpcdesc <description>
+/looknpc <name>
+
+
+dialogue commands:
+/fs createdialogue <dialoguename>
+/fs setnpcmsg <msg>
+/fs addpmsg <msg>
+/fs addnpcmsg <pmsg #>
+/fs savedialogue 
+/fs closedialogue
+/fs delpmsg
+/fs delnpcmsg // boots the current node back up to the 
+				previous one

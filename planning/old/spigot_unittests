@@ -1,0 +1,166 @@
+
+[P] base plugin loads successfully
+	- [P] this is to check that the base format is correct
+	- [P] test printing from the command with no other
+			actions or validations
+	
+
+[P] entering "/spawnnpc <name>" spawns an NPC with that name
+	[P] requires the "name" to be added and visible
+	[P] NPC must not move
+	[P] NPC must persist through server shutdowns
+	[P] NPC must persist after leaving long distances
+	[F] If name conflicts, no NPC will be created.
+	[F] (later) NPC is invincible.
+
+[P] entering "/deletenpc <name>" removes the NPC
+	[F] Only the player owner may do this
+	[F] Errors if no NPC with that name exists
+
+
+[P] NPCs are reloaded upon server startup
+	T*[F] location data is included in reload (this is needed for deletion)
+	T[F] Player owner, other data is properly loaded
+
+T[F] closed dialogues are saved to individual files upon load
+	T[F] These dialogues contain player owner info
+	[F] These are saved in the plugin dialogues/ folder
+
+
+[F] dialogues are loaded upon startup
+	[F] Players can re-open dialogues for editing (test after C:open works)
+	[F] Only players who own that dialogue can edit it
+	[F] Dialogues are assigned to NPCs correctly (try initiating talk)
+	[F]  
+
+
+	
+
+[P] /npcdesc <name> <description> edits the NPC description for the given name
+	[P] Fails if incorrect parameters given
+	[P] Fails if no NPC with that name exists
+	[P] check that data remains after server reboot
+	[F] <later feature> - only users on permissions list
+		can edit given NPC desc
+
+[P] /looknpc <name> prints the NPC description for given NPC
+	[P] Fails if incorrect parameters given
+	[P] Fails if no NPC with that name exists
+	[P] prints "You can't determine much about this person." 
+		if no description exists
+
+
+----Conversational commands
+*these are created individually, then assigned to an NPC
+
+See lua unit tests
+ [P] /fs createDialogue <name> creates a new dialogue for
+ 		that user
+ 	[P] fails if incorrect params
+ 	[P] fails if user has already created a dialogue with that name
+ 	[P] prints "please save and exit current dialogue before
+ 					creating a new one."
+
+ [P] entering addPMsg adds a player response option for the current node
+	[P] Fails if not on an NPC node
+	[P] Fails if there is no tree currently created (alert user)
+	[P] Automatically follow/add the current numbering.
+	[P] Fails if the number of messages already added is at max, and alerts the user
+	[P] Doesn't print anything extra if there are no p msgs to print
+	[P] Shows an * if there is an assoc. npc message
+
+[P] entering addNPCMsg <#> <message> adds a msg for the selected p statement
+		[P] command is parsed correctly: 1 = command, 2 = pMsg, 3 = NPCMsg
+		[F] fails and errors out if there is no PMsg to add that msg to
+		[F] creates new node
+		[F] Fails if current.pStatements[] = nil
+		[F] Fails if current.PStatements[givenIndex] = nil
+ 	
+
+
+[F] entering selPMsg <#> switches to the node for that statement.
+	[F] If there is no NPC node for that statement, alert the user.
+		or: create empty one? might make more sense
+	[F] fails if there is no PMsg for the given index
+	[F] Fails if no tree has been created, etc...
+
+[F] Entering talknpc <name> initiates conversation with that npc
+	[F] Doing so also closes conversations with any other NPCs.
+	[F] If there's no assigned dialogue, user is informed
+	[F] If the user is already talking to the npc, inform them
+	[F]
+
+------
+Error types
+------
+Are we doing error types to return from the class structure?
+What would they be? Example:
+	Null tree node
+	Missing node element (msg, for example)
+	Invalid tree, can't traverse
+	Tree size limit exceeded while traversing
+
+Error struct to return from function:
+	Struct error {
+		error msg = ""
+		error type = type
+	}
+
+Would type and msg be redundant? No - because we can print the string directly, otherwise the string is formed from the msg every time anyways (unless we only print the type?)
+
+
+
+-------
+/talknpc related commands: player perspective
+-------
+
+/tnpc <name>  
+	- Initiates new conversation with selected NPC.
+	- If already in convo currently, restart or do nothing?
+
+/tnpc <number>
+	- For already existing convos. Selects possible player responses
+	- if no convo has already been started, then print:
+		"Invalid. Please initiate a conversation with an NPC first."
+
+
+-------
+/talknpc related commands: code perspective
+	- each player will need their own active in-memory dialogue, if there is one open, similar to how currently edited dialogues work.
+	- 
+-------
+/talknpc <name>
+	- Check master list of npc names. If it is not currently in
+		active memory, then load it from file. 
+	- print the npc name + msg
+				and then numbered player list.
+
+	- after this, 
+
+
+
+
+*notes: 
+requirements for NPC description and dialogue data:
+	- custom sublcass (or as in notes, data class tied to that NPC's ID).
+		- subclass is handy for any customized behavior, such
+			as walk patters or invulnerability.
+	- data saving (database or JSON files?) mechanism to load
+		between shutdowns
+
+
+
+user shouldn't have to be near their NPCs to edit their names or dialogue, or delete them
+
+
+a per-user NPC limit may need to be created. 
+
+
+
+saved data for NPCs:
+	- name
+	- ID
+	- dialogue tree (tied to by filename)
+	- player owners
+	- 
+
